@@ -8,6 +8,7 @@ class WindowMain : public Gtk::Window {
         WindowMain();
 
     protected:
+        void on_category_choose();
         void quit();
 
     private:

@@ -21,18 +21,22 @@ WindowMain::WindowMain() {
     boxCategories.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
     boxCategories.pack_start( radioCakes, false, false );
+    radioCakes.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
     radioCakes.set_group( groupCategories );
     radioCakes.set_label( "Торты" );
 
     boxCategories.pack_start( radioCandy, false, false );
+    radioCandy.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
     radioCandy.set_group( groupCategories );
     radioCandy.set_label( "Конфеты" );
 
     boxCategories.pack_start( radioCoockies, false, false );
+    radioCoockies.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
     radioCoockies.set_group( groupCategories );
     radioCoockies.set_label( "Печенье" );
 
     boxCategories.pack_start( radioJujube, false, false );
+    radioJujube.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
     radioJujube.set_group( groupCategories );
     radioJujube.set_label( "Мармелад" );
 
@@ -69,6 +73,20 @@ WindowMain::WindowMain() {
 
     /* Run */
     show_all_children();
+}
+
+void WindowMain::on_category_choose() {
+    if( radioCakes.get_active() ) {
+        g_print( "Cakes\n" );
+    } else if( radioCandy.get_active() ) {
+        g_print( "Candy\n" );
+    } else if( radioCoockies.get_active() ) {
+        g_print( "Coockies\n" );
+    } else if( radioJujube.get_active() ) {
+        g_print( "Jujube\n" );
+    } else {
+        g_print( "What a f...? o_O\n" );
+    }
 }
 
 void WindowMain::quit() {
