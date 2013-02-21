@@ -54,7 +54,18 @@ WindowMain::WindowMain() {
     boxBuy.pack_start( entryCount, false, false, widgets_border );
 
     boxBuy.pack_start( buttonBuy, false, false, widgets_border );
-    buttonBuy.set_label( "Купить" );
+    buttonBuy.set_label( "Купить >>" );
+
+    boxBuy.pack_start( buttonRemove, false, false, widgets_border );
+    buttonRemove.set_label( "Удалить <<" );
+
+    /* List of purchases */
+    boxMain.pack_start( boxPurchase, true, true, widgets_border );
+    boxBuy.set_orientation( Gtk::ORIENTATION_VERTICAL );
+
+    boxPurchase.pack_start( scrolledPurchases, true, true, widgets_border );
+    scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
+    scrolledPurchases.add( treePurchases );
 
     /* Run */
     show_all_children();

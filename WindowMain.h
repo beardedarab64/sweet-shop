@@ -21,13 +21,18 @@ class WindowMain : public Gtk::Window {
         Gtk::RadioButton::Group groupCategories;
 
         Gtk::ScrolledWindow scrolledGoods;
-        Gtk::TreeView treeGoods;
+        Gtk::TreeView treeGoods; /** TODO: Make new class! */
 
         Gtk::Box boxBuy;
         Gtk::Image imageAvailable;
         Gtk::Label labelAvailable;
         Gtk::Entry entryCount;
         Gtk::Button buttonBuy;
+        Gtk::Button buttonRemove;
+
+        Gtk::Box boxPurchase;
+        Gtk::ScrolledWindow scrolledPurchases;
+        Gtk::TreeView treePurchases;  /** TODO: Make new class! */
 };
 
 #endif // WINDOWMAIN_H
