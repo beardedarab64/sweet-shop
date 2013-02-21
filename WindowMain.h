@@ -22,6 +22,12 @@ class WindowMain : public Gtk::Window {
 
         Gtk::ScrolledWindow scrolledGoods;
         Gtk::TreeView treeGoods;
+
+        Gtk::Box boxBuy;
+        Gtk::Image imageAvailable;
+        Gtk::Label labelAvailable;
+        Gtk::Entry entryCount;
+        Gtk::Button buttonBuy;
 };
 
 #endif // WINDOWMAIN_H
