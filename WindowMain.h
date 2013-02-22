@@ -2,6 +2,7 @@
 #define WINDOWMAIN_H
 
 #include <gtkmm.h>
+#include "TreeViewGoods.h"
 
 class WindowMain : public Gtk::Window {
     public:
@@ -23,14 +24,13 @@ class WindowMain : public Gtk::Window {
         Gtk::RadioButton::Group groupCategories;
 
         Gtk::ScrolledWindow scrolledGoods;
-        Gtk::TreeView treeGoods; /** TODO: Make new class! */
+        TreeViewGoods treeGoods;
 
         Gtk::Box boxBuy;
         Gtk::Image imageAvailable;
         Gtk::Label labelAvailable;
         Gtk::Entry entryCount;
         Gtk::Button buttonBuy;
-        Gtk::Button buttonRemove;
 
         Gtk::Box boxPurchase;
         Gtk::ScrolledWindow scrolledPurchases;
