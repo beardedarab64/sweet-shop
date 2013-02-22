@@ -8,7 +8,7 @@ WindowMain::WindowMain() {
 
     /* Main window preferences */
     set_title( "Sweet Shop v0.1" );
-    set_default_size( 640, 480 );
+    set_default_size( 640, 400 );
     set_border_width( widgets_border );
 
     /* Main box */
@@ -20,25 +20,10 @@ WindowMain::WindowMain() {
     boxMain.pack_start( boxCategories, false, false, widgets_border );
     boxCategories.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
-    boxCategories.pack_start( radioCakes, false, false );
-    radioCakes.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
-    radioCakes.set_group( groupCategories );
-    radioCakes.set_label( "Торты" );
-
-    boxCategories.pack_start( radioCandy, false, false );
-    radioCandy.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
-    radioCandy.set_group( groupCategories );
-    radioCandy.set_label( "Конфеты" );
-
-    boxCategories.pack_start( radioCoockies, false, false );
-    radioCoockies.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
-    radioCoockies.set_group( groupCategories );
-    radioCoockies.set_label( "Печенье" );
-
-    boxCategories.pack_start( radioJujube, false, false );
-    radioJujube.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
-    radioJujube.set_group( groupCategories );
-    radioJujube.set_label( "Мармелад" );
+    create_category( radioCakes, "Торты" );
+    create_category( radioCandy, "Конфеты" );
+    create_category( radioCoockies, "Печенье" );
+    create_category( radioJujube, "Мармелад" );
 
     /* List of goods */
     boxMain.pack_start( scrolledGoods, true, true, widgets_border );
@@ -73,6 +58,13 @@ WindowMain::WindowMain() {
 
     /* Run */
     show_all_children();
+}
+
+void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
+    boxCategories.pack_start( radio, false, false );
+    radio.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
+    radio.set_group( groupCategories );
+    radio.set_label( label );
 }
 
 void WindowMain::on_category_choose() {

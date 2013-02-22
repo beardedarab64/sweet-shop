@@ -8,6 +8,7 @@ class WindowMain : public Gtk::Window {
         WindowMain();
 
     protected:
+        void create_category( Gtk::RadioButton &, const char * );
         void on_category_choose();
         void quit();
 
