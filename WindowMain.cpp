@@ -1,5 +1,4 @@
 #include "WindowMain.h"
-
 #include <gtkmm.h>
 
 /* Some constants */
@@ -61,6 +60,7 @@ WindowMain::WindowMain() {
 }
 
 void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
+    /* Create a radiobutton and connect signal */
     boxCategories.pack_start( radio, false, false );
     radio.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
     radio.set_group( groupCategories );

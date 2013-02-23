@@ -4,9 +4,6 @@
 #include <gtkmm.h>
 #include "GoodsColumns.h"
 
-typedef struct GColumnsModel_t {
-} GColumnsModel;
-
 class TreeViewGoods : public Gtk::TreeView {
     public:
         TreeViewGoods();

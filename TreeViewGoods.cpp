@@ -6,13 +6,14 @@ TreeViewGoods::TreeViewGoods() {
     set_model( treeRecords );
 
     /* Create columns */
-    append_column( "N", treeColumns.id );
+    append_column( "Код", treeColumns.id );
     append_column( "Наименование", treeColumns.name );
     append_column( "Цена", treeColumns.price );
     append_column( "Ед.Изм.", treeColumns.item );
 }
 
 void TreeViewGoods::remove_all_rows() {
+    /* No comments :) */
     treeRecords->clear();
 }
 
