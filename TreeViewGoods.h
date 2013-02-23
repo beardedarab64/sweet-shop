@@ -2,6 +2,7 @@
 #define TREEVIEWGOODS_H
 
 #include <gtkmm.h>
+#include "GoodsColumns.h"
 
 class TreeViewGoods : public Gtk::TreeView {
     public:
@@ -11,7 +12,8 @@ class TreeViewGoods : public Gtk::TreeView {
         //
 
     private:
-        //
+        GoodsColumns treeColumns;
+        Glib::RefPtr<Gtk::ListStore> treeRecords;
 };
 
 #endif // TREEVIEWGOODS_H

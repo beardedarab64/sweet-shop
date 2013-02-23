@@ -3,8 +3,8 @@ RM = rm -rf
 CFLAGS = -Wall -g -c $(shell pkg-config --cflags gtkmm-3.0)
 LDFLAGS = $(shell pkg-config --libs gtkmm-3.0)
 
-SOURCES = sweet-shop.cpp WindowMain.cpp TreeViewGoods.cpp
-OBJECTS = sweet-shop.o WindowMain.o TreeViewGoods.o
+SOURCES = sweet-shop.cpp WindowMain.cpp TreeViewGoods.cpp GoodsColumns.cpp
+OBJECTS = sweet-shop.o WindowMain.o TreeViewGoods.o GoodsColumns.o
 
 EXECUTABLE = sweet-shop
 
@@ -17,8 +17,11 @@ sweet-shop.o: sweet-shop.cpp WindowMain.h
 WindowMain.o: WindowMain.cpp WindowMain.h TreeViewGoods.h
 	$(CC) $(CFLAGS) WindowMain.cpp
 
-TreeViewGoods.o: TreeViewGoods.cpp TreeViewGoods.h
+TreeViewGoods.o: TreeViewGoods.cpp TreeViewGoods.h GoodsColumns.h
 	$(CC) $(CFLAGS) TreeViewGoods.cpp
+
+GoodsColumns.o: GoodsColumns.cpp GoodsColumns.h
+	$(CC) $(CFLAGS) GoodsColumns.cpp
 
 clean:
 	$(RM) $(OBJECTS) $(EXECUTABLE)
