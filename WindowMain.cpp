@@ -10,7 +10,7 @@ const unsigned int widgets_border = 5;
 WindowMain::WindowMain() {
     /* Main window preferences */
     set_title( program_name );
-    set_default_size( 640, 400 );
+    set_default_size( 800, 400 );
     set_border_width( widgets_border );
 
     /* Main box */
@@ -70,12 +70,16 @@ void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
 void WindowMain::on_category_choose() {
     if( radioCakes.get_active() ) {
         g_print( "Cakes\n" );
+        treeGoods.append_data( "1", "Киевский", "35.45", "кг" );
     } else if( radioCandy.get_active() ) {
         g_print( "Candy\n" );
+        treeGoods.append_data( "2", "Ромашки", "40.00", "кг" );
     } else if( radioCoockies.get_active() ) {
         g_print( "Coockies\n" );
+        treeGoods.append_data( "3", "Штучки", "23.25", "кг" );
     } else if( radioJujube.get_active() ) {
         g_print( "Jujube\n" );
+        treeGoods.append_data( "4", "Мармеладки", "30.00", "кг" );
     } else {
         g_print( "What a f...? o_O\n" );
     }

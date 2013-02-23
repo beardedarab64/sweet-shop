@@ -7,9 +7,9 @@ class GoodsColumns : public Gtk::TreeModel::ColumnRecord {
     public:
         GoodsColumns();
 
-        Gtk::TreeModelColumn<unsigned int> id;
+        Gtk::TreeModelColumn<Glib::ustring> id;
         Gtk::TreeModelColumn<Glib::ustring> name;
-        Gtk::TreeModelColumn<double> price;
+        Gtk::TreeModelColumn<Glib::ustring> price;
         Gtk::TreeModelColumn<Glib::ustring> item;
 };
 

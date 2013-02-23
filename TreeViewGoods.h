@@ -4,9 +4,13 @@
 #include <gtkmm.h>
 #include "GoodsColumns.h"
 
+typedef struct GColumnsModel_t {
+} GColumnsModel;
+
 class TreeViewGoods : public Gtk::TreeView {
     public:
         TreeViewGoods();
+        void append_data( Glib::ustring, Glib::ustring, Glib::ustring, Glib::ustring );
 
     protected:
         //
