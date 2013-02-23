@@ -12,8 +12,12 @@ TreeViewGoods::TreeViewGoods() {
     append_column( "Ед.Изм.", treeColumns.item );
 }
 
-void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name,
-                                 Glib::ustring price, Glib::ustring item ) {
+void TreeViewGoods::remove_all_rows() {
+    treeRecords->clear();
+}
+
+void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ustring price, Glib::ustring item ) {
+    /* Add new row and put data in it */
     Gtk::TreeModel::Row row = *( treeRecords->append() );
     row[ treeColumns.id ] = id;
     row[ treeColumns.name ] = name;

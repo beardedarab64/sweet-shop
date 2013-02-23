@@ -10,10 +10,8 @@ typedef struct GColumnsModel_t {
 class TreeViewGoods : public Gtk::TreeView {
     public:
         TreeViewGoods();
+        void remove_all_rows();
         void append_data( Glib::ustring, Glib::ustring, Glib::ustring, Glib::ustring );
-
-    protected:
-        //
 
     private:
         GoodsColumns treeColumns;

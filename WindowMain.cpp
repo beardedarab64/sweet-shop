@@ -68,17 +68,15 @@ void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
 }
 
 void WindowMain::on_category_choose() {
+    treeGoods.remove_all_rows();
+
     if( radioCakes.get_active() ) {
-        g_print( "Cakes\n" );
         treeGoods.append_data( "1", "Киевский", "35.45", "кг" );
     } else if( radioCandy.get_active() ) {
-        g_print( "Candy\n" );
         treeGoods.append_data( "2", "Ромашки", "40.00", "кг" );
     } else if( radioCoockies.get_active() ) {
-        g_print( "Coockies\n" );
         treeGoods.append_data( "3", "Штучки", "23.25", "кг" );
     } else if( radioJujube.get_active() ) {
-        g_print( "Jujube\n" );
         treeGoods.append_data( "4", "Мармеладки", "30.00", "кг" );
     } else {
         g_print( "What a f...? o_O\n" );
