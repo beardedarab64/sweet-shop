@@ -11,6 +11,7 @@ class WindowMain : public Gtk::Window {
     protected:
         void create_category( Gtk::RadioButton &, const char * );
         void on_category_choose();
+        void load_from_db();
         void quit();
 
     private:

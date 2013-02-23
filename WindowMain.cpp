@@ -1,9 +1,10 @@
 #include "WindowMain.h"
 #include <gtkmm.h>
 
+#include <stdlib.h>
+
 /* Some constants */
 const char program_name[] = "Sweet Shop";
-const char program_version[] = "v0.2";
 const unsigned int widgets_border = 5;
 
 WindowMain::WindowMain() {
@@ -39,9 +40,9 @@ WindowMain::WindowMain() {
     imageAvailable.set_size_request( 72, 72 );
 
     boxBuy.pack_start( labelAvailable, false, false, widgets_border );
-    labelAvailable.set_label( "-" );
 
     boxBuy.pack_start( entryCount, false, false, widgets_border );
+    entryCount.set_text( "1" );
 
     boxBuy.pack_start( buttonBuy, false, false, widgets_border );
     buttonBuy.set_label( "Купить" );
@@ -55,8 +56,8 @@ WindowMain::WindowMain() {
     scrolledPurchases.add( treePurchases );
 
     /* Run */
-    on_category_choose();
     show_all_children();
+    on_category_choose();
 }
 
 void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
@@ -68,10 +69,22 @@ void WindowMain::create_category( Gtk::RadioButton &radio, const char *label ) {
 }
 
 void WindowMain::on_category_choose() {
+    /* Loading data from database (in different thread) */
+    labelAvailable.set_label( "Загрузка..." );
+    imageAvailable.set( "data/img/wait.gif" );
+    Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::load_from_db ) );
+}
+
+void WindowMain::load_from_db() {
+    /* Clear goods list */
     treeGoods.remove_all_rows();
 
+    /* And load new data from database */
     if( radioCakes.get_active() ) {
-        treeGoods.append_data( "1", "Киевский", "35.45", "кг" );
+        for( int i = 0; i < 100; i++ ) {
+            treeGoods.append_data( "XXX", "Ололошка-ололоевская", "135.45", "кг" );
+            usleep(200000);
+        }
     } else if( radioCandy.get_active() ) {
         treeGoods.append_data( "2", "Ромашки", "40.00", "кг" );
     } else if( radioCoockies.get_active() ) {
@@ -81,6 +94,9 @@ void WindowMain::on_category_choose() {
     } else {
         g_print( "What a f...? o_O\n" );
     }
+
+    imageAvailable.clear();
+    labelAvailable.set_label( "Загружено!" );
 }
 
 void WindowMain::quit() {
