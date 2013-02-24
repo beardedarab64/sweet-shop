@@ -1,6 +1,7 @@
 #include "TreeViewGoods.h"
 
-TreeViewGoods::TreeViewGoods() {
+TreeViewGoods::TreeViewGoods()
+{
     /* Create tree */
     treeRecords = Gtk::ListStore::create( treeColumns );
     set_model( treeRecords );
@@ -12,12 +13,14 @@ TreeViewGoods::TreeViewGoods() {
     append_column( "Ед.Изм.", treeColumns.item );
 }
 
-void TreeViewGoods::remove_all_rows() {
+void TreeViewGoods::remove_all_rows()
+{
     /* No comments :) */
     treeRecords->clear();
 }
 
-void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ustring price, Glib::ustring item ) {
+void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ustring price, Glib::ustring item )
+{
     /* Add new row and put data in it */
     Gtk::TreeModel::Row row = *( treeRecords->append() );
     row[ treeColumns.id ] = id;

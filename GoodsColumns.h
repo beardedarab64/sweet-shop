@@ -3,7 +3,8 @@
 
 #include <gtkmm.h>
 
-class GoodsColumns : public Gtk::TreeModel::ColumnRecord {
+class GoodsColumns: public Gtk::TreeModel::ColumnRecord
+{
     public:
         GoodsColumns();
 

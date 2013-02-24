@@ -4,7 +4,8 @@
 #include <gtkmm.h>
 #include "TreeViewGoods.h"
 
-class WindowMain : public Gtk::Window {
+class WindowMain: public Gtk::Window
+{
     public:
         WindowMain();
 

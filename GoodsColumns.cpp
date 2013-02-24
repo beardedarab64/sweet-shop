@@ -1,6 +1,7 @@
 #include "GoodsColumns.h"
 
-GoodsColumns::GoodsColumns() {
+GoodsColumns::GoodsColumns()
+{
     add( id );
     add( name );
     add( price );

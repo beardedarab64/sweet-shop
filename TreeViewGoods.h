@@ -4,7 +4,8 @@
 #include <gtkmm.h>
 #include "GoodsColumns.h"
 
-class TreeViewGoods : public Gtk::TreeView {
+class TreeViewGoods: public Gtk::TreeView
+{
     public:
         TreeViewGoods();
         void remove_all_rows();
