@@ -1,7 +1,7 @@
 #include "WindowMain.h"
+#include "database.h"
 #include <gtkmm.h>
-
-#include <stdlib.h>
+#include <stdio.h>
 
 /* Some constants */
 const char program_name[] = "Sweet Shop";
@@ -75,24 +75,27 @@ void WindowMain::on_category_choose() {
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::load_from_db ) );
 }
 
+void WindowMain::get_goodslist( const char *type ) {
+    char command[ 200 ];
+    sprintf( command, "SELECT id, name, price, item FROM %s;", type);
+    execute_query( command );
+}
+
 void WindowMain::load_from_db() {
     /* Clear goods list */
     treeGoods.remove_all_rows();
 
     /* And load new data from database */
     if( radioCakes.get_active() ) {
-        for( int i = 0; i < 100; i++ ) {
-            treeGoods.append_data( "XXX", "Ололошка-ололоевская", "135.45", "кг" );
-            usleep(200000);
-        }
+        get_goodslist( "Cakes" );
     } else if( radioCandy.get_active() ) {
-        treeGoods.append_data( "2", "Ромашки", "40.00", "кг" );
+        get_goodslist( "Candy" );
     } else if( radioCoockies.get_active() ) {
-        treeGoods.append_data( "3", "Штучки", "23.25", "кг" );
+        get_goodslist( "Coockies" );
     } else if( radioJujube.get_active() ) {
-        treeGoods.append_data( "4", "Мармеладки", "30.00", "кг" );
+        get_goodslist( "Jujube" );
     } else {
-        g_print( "What a f...? o_O\n" );
+        g_error( "What a f...? o_O\n" );
     }
 
     imageAvailable.clear();
