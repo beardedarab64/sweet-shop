@@ -1,7 +1,8 @@
 #include "WindowMain.h"
 #include "database.h"
 #include <gtkmm.h>
-#include <stdio.h>
+#include <cstring>
+#include <stdlib.h>
 
 /* Some constants */
 const char program_name[] = "Sweet Shop";
@@ -53,6 +54,9 @@ WindowMain::WindowMain()
     scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledPurchases.add( treePurchases );
 
+    /**/
+    //treeGoods.signal_row_activated().connect( sigc::mem_fun( *this, &WindowMain::lolka ) );
+
     /* Run */
     show_all_children();
     on_category_choose();
@@ -77,10 +81,31 @@ void WindowMain::on_category_choose()
 
 void WindowMain::get_goodslist( const char *type )
 {
+    /*
     char *command = new char[ 100 ];
     sprintf( command, "SELECT id, name, price, item FROM %s;", type);
     execute_query( command );
     delete[] command;
+    */
+    sleep(1);
+    if( !strcmp( type, "Cakes" ) )
+    {
+        treeGoods.append_data( "01", "TORT01", "115.10", "кг" );
+        treeGoods.append_data( "02", "ololoshka_02", "77.00", "кг" );
+        treeGoods.append_data( "03", "Жидвпечи", "0.99", "кг" );
+    }
+    else if( !strcmp( type, "Candy" ) )
+    {
+        treeGoods.append_data( "01", "Канхфетка", "70.00", "кг" );
+    }
+    else if( !strcmp( type, "Coockies" ) )
+    {
+        treeGoods.append_data( "01", "Печенька \"Жид в масле\"", "45.00", "кг" );
+    }
+    else if( !strcmp( type, "Jujube" ) )
+    {
+        treeGoods.append_data( "01", "Канхфетка", "70.00", "кг" );
+    }
 }
 
 void WindowMain::load_from_db()
@@ -115,5 +140,10 @@ void WindowMain::quit()
     hide();
     /* Just hide main window,
        it will be destroyed automatically! */
+}
+
+void lolka( const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column )
+{
+    //
 }
 
