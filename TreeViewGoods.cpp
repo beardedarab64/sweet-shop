@@ -15,7 +15,6 @@ TreeViewGoods::TreeViewGoods()
 
 void TreeViewGoods::remove_all_rows()
 {
-    /* No comments :) */
     treeRecords->clear();
 }
 

@@ -81,7 +81,7 @@ void WindowMain::on_category_choose()
 
 void WindowMain::get_goodslist( const char *type )
 {
-    /*
+    /** TODO: Make this shit works! **
     char *command = new char[ 100 ];
     sprintf( command, "SELECT id, name, price, item FROM %s;", type);
     execute_query( command );
