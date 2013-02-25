@@ -3,6 +3,7 @@
 
 #include <gtkmm.h>
 #include "TreeViewGoods.h"
+#include "TreeViewPurchases.h"
 
 class WindowMain: public Gtk::Window
 {
@@ -39,7 +40,7 @@ class WindowMain: public Gtk::Window
 
         Gtk::Box boxPurchase;
         Gtk::ScrolledWindow scrolledPurchases;
-        Gtk::TreeView treePurchases;  /** TODO: Make new class! */
+        TreeViewPurchases treePurchases;
 };
 
 #endif // WINDOWMAIN_H

@@ -87,7 +87,7 @@ void WindowMain::get_goodslist( const char *type )
     execute_query( command );
     delete[] command;
     */
-    sleep(1);
+
     if( !strcmp( type, "Cakes" ) )
     {
         treeGoods.append_data( "01", "TORT01", "115.10", "кг" );
