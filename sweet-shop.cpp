@@ -3,8 +3,7 @@
 
 int main( int argc, char **argv )
 {
-    const char app_name[] = "com.sweet-shop";
-    Glib::RefPtr<Gtk::Application> app = Gtk::Application::create( argc, argv, app_name );
+    Glib::RefPtr<Gtk::Application> app = Gtk::Application::create( argc, argv, "com.sweet-shop" );
     WindowMain win;
     return app->run( win );
 }

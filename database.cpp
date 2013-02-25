@@ -3,9 +3,13 @@
 
 int execute_query( const char *query )
 {
-    //how this shit works?
-    //sqlite3 *pDB;
-    //sqlite3_open( "data/goods.db", &pDB );
-    //sqlite3_close( pDB );
+    sqlite3 *pDB;
+
+    if( sqlite3_open( "data/goods.db", &pDB ) == SQLITE_OK )
+    {
+        sqlite3_close( pDB );
+    }
+
     return 0;
 }
+

@@ -1,7 +1,7 @@
 CC = g++
 RM = rm -rf
 CFLAGS = -Wall -g -c $(shell pkg-config --cflags gtkmm-3.0)
-LDFLAGS = $(shell pkg-config --libs gtkmm-3.0)
+LDFLAGS = $(shell pkg-config --libs gtkmm-3.0) -lsqlite3 
 
 SOURCES = sweet-shop.cpp WindowMain.cpp TreeViewGoods.cpp GoodsColumns.cpp \
           database.cpp TreeViewPurchases.cpp PurchasesColumns.cpp
