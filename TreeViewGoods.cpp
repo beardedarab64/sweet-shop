@@ -1,6 +1,5 @@
 #include "TreeViewGoods.h"
 #include "WindowInform.h"
-#include <cstdlib>
 
 TreeViewGoods::TreeViewGoods()
 {
@@ -48,6 +47,7 @@ void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ust
 void TreeViewGoods::on_menu_file_popup_generic()
 {
     WindowInform information;
+    // x3
 }
 
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
@@ -72,14 +72,7 @@ void TreeViewGoods::check_available()
 {
     sleep( 1 );
 
-    if( ( rand() & 1 ) == 0 )
-    {
-        imageAvailable->set( "data/img/lamp_on.png" );
-        labelAvailable->set_label( "Есть в наличии!" );
-    } else {
-        imageAvailable->set( "data/img/lamp_off.png" );
-        labelAvailable->set_label( "Нет в наличии!" );
-    }
+    //execute_query_select(  );
 }
 
 void TreeViewGoods::set_available( Gtk::Image * image, Gtk::Label * label )
