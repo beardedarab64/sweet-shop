@@ -4,10 +4,10 @@ CFLAGS = -Wall -g -c $(shell pkg-config --cflags gtkmm-3.0)
 LDFLAGS = $(shell pkg-config --libs gtkmm-3.0) -lsqlite3 
 
 SOURCES = sweet-shop.cpp WindowMain.cpp TreeViewGoods.cpp GoodsColumns.cpp \
-          database.cpp TreeViewPurchases.cpp PurchasesColumns.cpp
+          database.cpp TreeViewPurchases.cpp PurchasesColumns.cpp WindowInform.cpp
 
 OBJECTS = sweet-shop.o WindowMain.o TreeViewGoods.o GoodsColumns.o \
-          database.o TreeViewPurchases.o PurchasesColumns.o
+          database.o TreeViewPurchases.o PurchasesColumns.o WindowInform.o
 
 EXECUTABLE = sweet-shop
 
@@ -29,11 +29,14 @@ GoodsColumns.o: GoodsColumns.cpp GoodsColumns.h
 database.o: database.cpp database.h
 	$(CC) $(CFLAGS) database.cpp
 
-TreeViewPurchases.o: TreeViewPurchases.cpp TreeViewPurchases.h PurchasesColumns.h
+TreeViewPurchases.o: TreeViewPurchases.cpp TreeViewPurchases.h PurchasesColumns.h WindowInform.h
 	$(CC) $(CFLAGS) TreeViewPurchases.cpp
 
 PurchasesColumns.o: PurchasesColumns.cpp PurchasesColumns.h
 	$(CC) $(CFLAGS) PurchasesColumns.cpp
+
+WindowInform.o: WindowInform.cpp WindowInform.h database.h
+	$(CC) $(CFLAGS) WindowInform.cpp
 
 clean:
 	$(RM) $(OBJECTS) $(EXECUTABLE)

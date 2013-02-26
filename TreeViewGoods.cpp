@@ -1,4 +1,5 @@
 #include "TreeViewGoods.h"
+#include "WindowInform.h"
 #include <cstdlib>
 
 TreeViewGoods::TreeViewGoods()
@@ -46,7 +47,7 @@ void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ust
 
 void TreeViewGoods::on_menu_file_popup_generic()
 {
-    // show new window with description
+    WindowInform information;
 }
 
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
