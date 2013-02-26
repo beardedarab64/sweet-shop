@@ -32,6 +32,7 @@ WindowMain::WindowMain()
     boxMain.pack_start( scrolledGoods, true, true, widgets_border );
     scrolledGoods.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledGoods.add( treeGoods );
+    treeGoods.set_available( &imageAvailable, &labelAvailable );
 
     /* Buy section */
     boxMain.pack_start( boxBuy, false, false, widgets_border );
@@ -53,9 +54,6 @@ WindowMain::WindowMain()
     boxPurchase.pack_start( scrolledPurchases, true, true, widgets_border );
     scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledPurchases.add( treePurchases );
-
-    /**/
-    //treeGoods.signal_row_activated().connect( sigc::mem_fun( *this, &WindowMain::lolka ) );
 
     /* Run */
     show_all_children();
@@ -90,21 +88,19 @@ void WindowMain::get_goodslist( const char *type )
 
     if( !strcmp( type, "Cakes" ) )
     {
-        treeGoods.append_data( "01", "TORT01", "115.10", "кг" );
-        treeGoods.append_data( "02", "ololoshka_02", "77.00", "кг" );
-        treeGoods.append_data( "03", "Жидвпечи", "0.99", "кг" );
+        treeGoods.append_data( "01", "Тортик", "115.10", "кг" );
     }
     else if( !strcmp( type, "Candy" ) )
     {
-        treeGoods.append_data( "01", "Канхфетка", "70.00", "кг" );
+        treeGoods.append_data( "01", "Конфетка", "70.00", "кг" );
     }
     else if( !strcmp( type, "Coockies" ) )
     {
-        treeGoods.append_data( "01", "Печенька \"Жид в масле\"", "45.00", "кг" );
+        treeGoods.append_data( "01", "Печенька", "45.00", "кг" );
     }
     else if( !strcmp( type, "Jujube" ) )
     {
-        treeGoods.append_data( "01", "Канхфетка", "70.00", "кг" );
+        treeGoods.append_data( "01", "Мармеладка", "70.00", "кг" );
     }
 }
 
@@ -138,12 +134,6 @@ void WindowMain::load_from_db()
 void WindowMain::quit()
 {
     hide();
-    /* Just hide main window,
-       it will be destroyed automatically! */
-}
-
-void lolka( const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column )
-{
-    //
+    /* Just hide main window, it will be destroyed automatically! */
 }
 

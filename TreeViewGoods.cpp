@@ -1,4 +1,5 @@
 #include "TreeViewGoods.h"
+#include <cstdlib>
 
 TreeViewGoods::TreeViewGoods()
 {
@@ -12,16 +13,15 @@ TreeViewGoods::TreeViewGoods()
     append_column( "Цена", treeColumns.price );
     append_column( "Ед.Изм.", treeColumns.item );
 
+    /* Create popup menu */
     Gtk::MenuItem* item = Gtk::manage( new Gtk::MenuItem( "Подробнее" ) );
     item->signal_activate().connect( sigc::mem_fun( *this, &TreeViewGoods::on_menu_file_popup_generic ) );
     menuPopup.append( *item );
     menuPopup.accelerate( *this );
     menuPopup.show_all();
 
-#ifndef GLIBMM_DEFAULT_SIGNAL_HANDLERS_ENABLED
-  signal_button_press_event()
-    .connect(sigc::mem_fun(*this, &TreeViewGoods::on_button_press_event), false);
-#endif
+    /* Connect press event signal (mouse clicks) */
+    signal_button_press_event().connect( sigc::mem_fun( *this, &TreeViewGoods::on_button_press_event ), false );
 }
 
 void TreeViewGoods::remove_all_rows()
@@ -41,22 +41,44 @@ void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ust
 
 void TreeViewGoods::on_menu_file_popup_generic()
 {
-    g_print( "Yeah!\n" );
+    // show new window with description
 }
 
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 {
-    g_print("попал таки\n");
-    bool return_value = false;
-    return_value = TreeView::on_button_press_event( event );
+    bool return_value = TreeView::on_button_press_event( event );
 
-    if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 3 ) )
+    if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) )
     {
-        g_print( "suck\n" );
+        imageAvailable->set( "data/img/wait.gif" );
+        labelAvailable->set_label( "Проверка наличия..." );
+        Glib::Thread::create( sigc::mem_fun( *this, &TreeViewGoods::check_available ) );
+    }
+    else if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 3 ) )
+    {
         menuPopup.popup( event->button, event->time );
     }
 
     return return_value;
 }
 
+void TreeViewGoods::check_available()
+{
+    sleep( 1 );
+
+    if( ( rand() & 1 ) == 0 )
+    {
+        imageAvailable->set( "data/img/lamp_on.png" );
+        labelAvailable->set_label( "Есть в наличии!" );
+    } else {
+        imageAvailable->set( "data/img/lamp_off.png" );
+        labelAvailable->set_label( "Нет в наличии!" );
+    }
+}
+
+void TreeViewGoods::set_available( Gtk::Image * image, Gtk::Label * label )
+{
+    imageAvailable = image;
+    labelAvailable = label;
+}
 

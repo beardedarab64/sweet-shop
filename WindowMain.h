@@ -17,8 +17,6 @@ class WindowMain: public Gtk::Window
         void load_from_db();
         void quit();
 
-        void lolka( const Gtk::TreeModel::Path& path, Gtk::TreeViewColumn* column );
-
     private:
         Gtk::Box boxMain;
 
