@@ -3,12 +3,14 @@
 
 #include <gtkmm.h>
 #include "GoodsColumns.h"
+#include "database.h"
 
 class TreeViewGoods: public Gtk::TreeView
 {
     public:
         TreeViewGoods();
         void remove_all_rows();
+        void append_data( GoodsRecord );
         void append_data( Glib::ustring, Glib::ustring, Glib::ustring, Glib::ustring );
         void check_available();
         void set_available( Gtk::Image *, Gtk::Label * );

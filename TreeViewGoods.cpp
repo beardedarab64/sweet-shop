@@ -29,6 +29,11 @@ void TreeViewGoods::remove_all_rows()
     treeRecords->clear();
 }
 
+void TreeViewGoods::append_data( GoodsRecord src )
+{
+    append_data( src.id, src.name, src.price, src.item );
+}
+
 void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ustring price, Glib::ustring item )
 {
     /* Add new row and put data in it */

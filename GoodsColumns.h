@@ -15,3 +15,4 @@ class GoodsColumns: public Gtk::TreeModel::ColumnRecord
 };
 
 #endif // GOODSCOLUMNS_H
+

@@ -2,16 +2,16 @@
 #include "database.h"
 #include <gtkmm.h>
 #include <cstring>
+#include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
-/* Some constants */
-const char program_name[] = "Sweet Shop";
 const unsigned int widgets_border = 5;
 
 WindowMain::WindowMain()
 {
     /* Main window preferences */
-    set_title( program_name );
+    set_title( "Sweet Shop" );
     set_default_size( 800, 400 );
     set_border_width( widgets_border );
 
@@ -79,29 +79,17 @@ void WindowMain::on_category_choose()
 
 void WindowMain::get_goodslist( const char *type )
 {
-    /** TODO: Make this shit works! **
-    char *command = new char[ 100 ];
+    char *command = new char[ COMMAND_TEXT_BUFFER ];
     sprintf( command, "SELECT id, name, price, item FROM %s;", type);
-    execute_query( command );
-    delete[] command;
-    */
+    std::vector<GoodsRecord> *res = execute_query_select( command );
 
-    if( !strcmp( type, "Cakes" ) )
+    for( unsigned int i = 0; i < res->size(); i++ )
     {
-        treeGoods.append_data( "01", "Тортик", "115.10", "кг" );
+        treeGoods.append_data( res->at( i ) );
     }
-    else if( !strcmp( type, "Candy" ) )
-    {
-        treeGoods.append_data( "01", "Конфетка", "70.00", "кг" );
-    }
-    else if( !strcmp( type, "Coockies" ) )
-    {
-        treeGoods.append_data( "01", "Печенька", "45.00", "кг" );
-    }
-    else if( !strcmp( type, "Jujube" ) )
-    {
-        treeGoods.append_data( "01", "Мармеладка", "70.00", "кг" );
-    }
+
+    delete res;
+    delete[] command;
 }
 
 void WindowMain::load_from_db()

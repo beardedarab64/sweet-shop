@@ -5,6 +5,8 @@
 #include "TreeViewGoods.h"
 #include "TreeViewPurchases.h"
 
+#define COMMAND_TEXT_BUFFER 128
+
 class WindowMain: public Gtk::Window
 {
     public:
