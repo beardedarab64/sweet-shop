@@ -1,6 +1,7 @@
 #include "TreeViewGoods.h"
 #include "WindowInform.h"
 #include "sweet-shop.h"
+#include <stdio.h>
 
 TreeViewGoods::TreeViewGoods()
 {
@@ -89,11 +90,14 @@ void TreeViewGoods::set_available( Gtk::Image * image, Gtk::Label * label )
 
 char *TreeViewGoods::get_activated()
 {
-    char *res = new char[ 16 ];
+    char *res;
 
     if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
         if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
-            //g_print("%s\n", ( *iter )[ treeColumns.id ] );
+            g_print( "selection = %x\niter = %p\n", (int)selection, iter );
+            Glib::ustring id = ( *iter )[ treeColumns.id ];
+            res = strdup( id.c_str() );
+            g_print("%s\n", res );
         }
     }
 
