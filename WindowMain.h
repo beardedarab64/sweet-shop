@@ -15,11 +15,15 @@ class WindowMain: public Gtk::Window
     protected:
         void create_category( Gtk::RadioButton &, const char * );
         void on_category_choose();
+        void on_button_buy_activate();
         void get_goodslist( const char * );
         void load_from_db();
         void quit();
 
     private:
+        Gtk::Box boxWindow;
+        Gtk::Statusbar statusbar;
+
         Gtk::Box boxMain;
 
         Gtk::Box boxCategories;

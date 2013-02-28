@@ -70,14 +70,38 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 
 void TreeViewGoods::check_available()
 {
-    sleep( 1 );
+    sleep( 1 ); // just for lulz :D
 
-    //execute_query_select(  );
+    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() )
+    {
+        if( Gtk::TreeModel::iterator iter = selection->get_selected() )
+        {
+            Glib::ustring id = ( *iter )[ treeColumns.id ];
+        }
+    }
+
+    imageAvailable->set( "data/img/lamp_off.png" );
+    labelAvailable->set_label( "Нет в наличии!" );
 }
 
 void TreeViewGoods::set_available( Gtk::Image * image, Gtk::Label * label )
 {
     imageAvailable = image;
     labelAvailable = label;
+}
+
+char *TreeViewGoods::get_activated()
+{
+    char *res = new char[ 16 ];
+
+    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() )
+    {
+        if( Gtk::TreeModel::iterator iter = selection->get_selected() )
+        {
+            g_print("%s\n", ( *iter )[ treeColumns.id ] );
+        }
+    }
+
+    return res;
 }
 

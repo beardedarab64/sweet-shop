@@ -12,7 +12,7 @@ WindowMain::WindowMain()
 {
     /* Main window preferences */
     set_title( "Sweet Shop" );
-    set_default_size( 800, 400 );
+    set_default_size( 900, 400 );
     set_border_width( widgets_border );
 
     /* Main box */
@@ -44,7 +44,9 @@ WindowMain::WindowMain()
     boxBuy.pack_start( labelAvailable, false, false, widgets_border );
     boxBuy.pack_start( entryCount, false, false, widgets_border );
     entryCount.set_text( "1" );
+
     boxBuy.pack_start( buttonBuy, false, false, widgets_border );
+    buttonBuy.signal_clicked().connect( sigc::mem_fun( *this, &WindowMain::on_button_buy_activate ) );
     buttonBuy.set_label( "Купить" );
 
     /* List of purchases */
@@ -75,6 +77,12 @@ void WindowMain::on_category_choose()
     labelAvailable.set_label( "Загрузка..." );
     imageAvailable.set( "data/img/wait.gif" );
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::load_from_db ) );
+}
+
+void WindowMain::on_button_buy_activate()
+{
+    char *id = treeGoods.get_activated();
+    delete[] id;
 }
 
 void WindowMain::get_goodslist( const char *type )
