@@ -1,5 +1,6 @@
 #include "TreeViewGoods.h"
 #include "WindowInform.h"
+#include "sweet-shop.h"
 
 TreeViewGoods::TreeViewGoods()
 {
@@ -55,7 +56,7 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
     bool return_value = TreeView::on_button_press_event( event );
 
     if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) ) {
-        imageAvailable->set( "data/img/wait.gif" );
+        imageAvailable->set( IMG_WAIT_PATH );
         labelAvailable->set_label( "Проверка наличия..." );
         Glib::Thread::create( sigc::mem_fun( *this, &TreeViewGoods::check_available ) );
     }
@@ -76,7 +77,7 @@ void TreeViewGoods::check_available()
         }
     }
 
-    imageAvailable->set( "data/img/lamp_off.png" );
+    imageAvailable->set( IMG_LAMP_OFF_PATH );
     labelAvailable->set_label( "Нет в наличии!" );
 }
 
@@ -92,7 +93,7 @@ char *TreeViewGoods::get_activated()
 
     if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
         if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
-            g_print("%s\n", ( *iter )[ treeColumns.id ] );
+            //g_print("%s\n", ( *iter )[ treeColumns.id ] );
         }
     }
 

@@ -1,4 +1,5 @@
 #include "WindowMain.h"
+#include "sweet-shop.h"
 #include "database.h"
 #include <gtkmm.h>
 #include <cstring>
@@ -6,25 +7,23 @@
 #include <stdlib.h>
 #include <vector>
 
-const unsigned int widgets_border = 5;
-
 WindowMain::WindowMain()
 {
     /* Main window preferences */
-    set_title( "Sweet Shop" );
+    set_title( WINDOW_MAIN_TITLE );
     set_default_size( 900, 400 );
-    set_border_width( widgets_border );
+    set_border_width( WIDGETS_BORDER );
 
     add( boxWindow );
     boxWindow.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
     /* Main box */
     boxWindow.pack_start( boxMain );
-    boxMain.set_border_width( widgets_border );
+    boxMain.set_border_width( WIDGETS_BORDER );
     boxMain.set_orientation( Gtk::ORIENTATION_HORIZONTAL );
 
     /* Categories of goods */
-    boxMain.pack_start( boxCategories, false, false, widgets_border );
+    boxMain.pack_start( boxCategories, false, false, WIDGETS_BORDER );
     boxCategories.set_orientation( Gtk::ORIENTATION_VERTICAL );
     create_category( radioCakes, "Торты" );
     create_category( radioCandy, "Конфеты" );
@@ -32,31 +31,31 @@ WindowMain::WindowMain()
     create_category( radioJujube, "Мармелад" );
 
     /* List of goods */
-    boxMain.pack_start( scrolledGoods, true, true, widgets_border );
+    boxMain.pack_start( scrolledGoods, true, true, WIDGETS_BORDER );
     scrolledGoods.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledGoods.add( treeGoods );
     treeGoods.set_available( &imageAvailable, &labelAvailable );
 
     /* Buy section */
-    boxMain.pack_start( boxBuy, false, false, widgets_border );
+    boxMain.pack_start( boxBuy, false, false, WIDGETS_BORDER );
     boxBuy.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
-    boxBuy.pack_start( imageAvailable, false, false, widgets_border );
+    boxBuy.pack_start( imageAvailable, false, false, WIDGETS_BORDER );
     imageAvailable.set_size_request( 72, 72 );
 
-    boxBuy.pack_start( labelAvailable, false, false, widgets_border );
-    boxBuy.pack_start( entryCount, false, false, widgets_border );
+    boxBuy.pack_start( labelAvailable, false, false, WIDGETS_BORDER );
+    boxBuy.pack_start( entryCount, false, false, WIDGETS_BORDER );
     entryCount.set_text( "1" );
 
-    boxBuy.pack_start( buttonBuy, false, false, widgets_border );
+    boxBuy.pack_start( buttonBuy, false, false, WIDGETS_BORDER );
     buttonBuy.signal_clicked().connect( sigc::mem_fun( *this, &WindowMain::on_button_buy_activate ) );
     buttonBuy.set_label( "Купить" );
 
     /* List of purchases */
-    boxMain.pack_start( boxPurchase, true, true, widgets_border );
+    boxMain.pack_start( boxPurchase, true, true, WIDGETS_BORDER );
     boxBuy.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
-    boxPurchase.pack_start( scrolledPurchases, true, true, widgets_border );
+    boxPurchase.pack_start( scrolledPurchases, true, true, WIDGETS_BORDER );
     scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledPurchases.add( treePurchases );
 
@@ -82,7 +81,7 @@ void WindowMain::on_category_choose()
 {
     /* Loading data from database (in different thread) */
     labelAvailable.set_label( "Загрузка..." );
-    imageAvailable.set( "data/img/wait.gif" );
+    imageAvailable.set( IMG_WAIT_PATH );
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::load_from_db ) );
 }
 

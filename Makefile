@@ -14,28 +14,31 @@ EXECUTABLE = sweet-shop
 all: $(OBJECTS)
 	$(CC) $(OBJECTS) $(LDFLAGS) -o $(EXECUTABLE)
 
-sweet-shop.o: sweet-shop.cpp WindowMain.h
+sweet-shop.o: sweet-shop.cpp sweet-shop.h WindowMain.h
 	$(CC) $(CFLAGS) sweet-shop.cpp
 
-WindowMain.o: WindowMain.cpp WindowMain.h TreeViewGoods.h TreeViewPurchases.h
+WindowMain.o: WindowMain.cpp WindowMain.h TreeViewGoods.h TreeViewPurchases.h \
+              sweet-shop.h
 	$(CC) $(CFLAGS) WindowMain.cpp
 
-TreeViewGoods.o: TreeViewGoods.cpp TreeViewGoods.h GoodsColumns.h database.h
+TreeViewGoods.o: TreeViewGoods.cpp TreeViewGoods.h GoodsColumns.h database.h \
+                 sweet-shop.h
 	$(CC) $(CFLAGS) TreeViewGoods.cpp
 
 GoodsColumns.o: GoodsColumns.cpp GoodsColumns.h
 	$(CC) $(CFLAGS) GoodsColumns.cpp
 
-database.o: database.cpp database.h
+database.o: database.cpp database.h sweet-shop.h
 	$(CC) $(CFLAGS) database.cpp
 
-TreeViewPurchases.o: TreeViewPurchases.cpp TreeViewPurchases.h PurchasesColumns.h WindowInform.h
+TreeViewPurchases.o: TreeViewPurchases.cpp TreeViewPurchases.h \
+                     PurchasesColumns.h WindowInform.h
 	$(CC) $(CFLAGS) TreeViewPurchases.cpp
 
 PurchasesColumns.o: PurchasesColumns.cpp PurchasesColumns.h
 	$(CC) $(CFLAGS) PurchasesColumns.cpp
 
-WindowInform.o: WindowInform.cpp WindowInform.h database.h
+WindowInform.o: WindowInform.cpp WindowInform.h database.h sweet-shop.h
 	$(CC) $(CFLAGS) WindowInform.cpp
 
 clean:

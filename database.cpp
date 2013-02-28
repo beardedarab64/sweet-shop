@@ -14,7 +14,7 @@ sqlite3 *open_database( const char *file )
     }
 }
 
-void *close_database( sqlite3 *database )
+void close_database( sqlite3 *database )
 {
     sqlite3_close( database );
 }
@@ -40,7 +40,7 @@ std::vector<GoodsRecord> *execute_query_select( const char *query )
 {
     std::vector<GoodsRecord> *result = new std::vector<GoodsRecord>;
     char *errmsg = new char[ ERROR_BUFFER_SIZE ];
-    sqlite3 *database = open_database( DATABASE_PATH )
+    sqlite3 *database = open_database( DATABASE_PATH );
 
     if( database != NULL ) {
         sqlite3_exec( database, query, select_callback, result, &errmsg );
@@ -54,13 +54,11 @@ std::vector<GoodsRecord> *execute_query_select( const char *query )
 char *execute_query_insert( const char *query )
 {
     char *errmsg = new char[ ERROR_BUFFER_SIZE ];
-    sqlite3 *database = open_database( DATABASE_PATH )
+    sqlite3 *database = open_database( DATABASE_PATH );
 
     if( database != NULL ) {
-        if( sqlite3_exec( database, query, select_callback, result, &errmsg ) == SQLITE_OK ) {
+        if( sqlite3_exec( database, query, NULL, NULL, &errmsg ) == SQLITE_OK ) {
             close_database( database );
-            delete[] errmsg;
-            return NULL;
         }
         else {
             close_database( database );
@@ -69,5 +67,6 @@ char *execute_query_insert( const char *query )
     }
 
     delete[] errmsg;
+    return NULL;
 }
 
