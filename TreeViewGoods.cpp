@@ -54,14 +54,12 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 {
     bool return_value = TreeView::on_button_press_event( event );
 
-    if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) )
-    {
+    if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) ) {
         imageAvailable->set( "data/img/wait.gif" );
         labelAvailable->set_label( "Проверка наличия..." );
         Glib::Thread::create( sigc::mem_fun( *this, &TreeViewGoods::check_available ) );
     }
-    else if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 3 ) )
-    {
+    else if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 3 ) ) {
         menuPopup.popup( event->button, event->time );
     }
 
@@ -72,10 +70,8 @@ void TreeViewGoods::check_available()
 {
     sleep( 1 ); // just for lulz :D
 
-    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() )
-    {
-        if( Gtk::TreeModel::iterator iter = selection->get_selected() )
-        {
+    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
+        if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
             Glib::ustring id = ( *iter )[ treeColumns.id ];
         }
     }
@@ -94,10 +90,8 @@ char *TreeViewGoods::get_activated()
 {
     char *res = new char[ 16 ];
 
-    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() )
-    {
-        if( Gtk::TreeModel::iterator iter = selection->get_selected() )
-        {
+    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
+        if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
             g_print("%s\n", ( *iter )[ treeColumns.id ] );
         }
     }

@@ -22,7 +22,7 @@ class WindowMain: public Gtk::Window
 
     private:
         Gtk::Box boxWindow;
-        Gtk::Statusbar statusbar;
+        Gtk::Statusbar statusbarMain;
 
         Gtk::Box boxMain;
 

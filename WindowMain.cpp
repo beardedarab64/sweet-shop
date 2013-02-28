@@ -15,8 +15,11 @@ WindowMain::WindowMain()
     set_default_size( 900, 400 );
     set_border_width( widgets_border );
 
+    add( boxWindow );
+    boxWindow.set_orientation( Gtk::ORIENTATION_VERTICAL );
+
     /* Main box */
-    add( boxMain );
+    boxWindow.pack_start( boxMain );
     boxMain.set_border_width( widgets_border );
     boxMain.set_orientation( Gtk::ORIENTATION_HORIZONTAL );
 
@@ -57,9 +60,13 @@ WindowMain::WindowMain()
     scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledPurchases.add( treePurchases );
 
+    /* Statusbar */
+    boxWindow.pack_start( statusbarMain, false, false );
+
     /* Run */
     show_all_children();
     on_category_choose();
+    statusbarMain.push( "Готовы к покупкам? :)" );
 }
 
 void WindowMain::create_category( Gtk::RadioButton &radio, const char *label )
@@ -91,35 +98,29 @@ void WindowMain::get_goodslist( const char *type )
     sprintf( command, "SELECT id, name, price, item FROM %s;", type);
     std::vector<GoodsRecord> *res = execute_query_select( command );
 
-    for( unsigned int i = 0; i < res->size(); i++ )
-    {
+    for( unsigned int i = 0; i < res->size(); i++ ) {
         treeGoods.append_data( res->at( i ) );
     }
 
-    delete res;
     delete[] command;
+    delete res;
 }
 
 void WindowMain::load_from_db()
 {
-    /* Clear goods list */
     treeGoods.remove_all_rows();
 
     /* And load new data from database */
-    if( radioCakes.get_active() )
-    {
+    if( radioCakes.get_active() ) {
         get_goodslist( "Cakes" );
     }
-    else if( radioCandy.get_active() )
-    {
+    else if( radioCandy.get_active() ) {
         get_goodslist( "Candy" );
     }
-    else if( radioCoockies.get_active() )
-    {
+    else if( radioCoockies.get_active() ) {
         get_goodslist( "Coockies" );
     }
-    else if( radioJujube.get_active() )
-    {
+    else if( radioJujube.get_active() ) {
         get_goodslist( "Jujube" );
     }
 
