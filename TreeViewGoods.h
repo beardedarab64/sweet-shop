@@ -14,7 +14,8 @@ class TreeViewGoods: public Gtk::TreeView
         void append_data( Glib::ustring, Glib::ustring, Glib::ustring, Glib::ustring );
         void check_available();
         void set_available( Gtk::Image *, Gtk::Label * );
-        char *get_activated();
+        void set_section( const char * );
+        char *get_activated_id();
 
     protected:
         bool on_button_press_event( GdkEventButton * );
@@ -27,6 +28,7 @@ class TreeViewGoods: public Gtk::TreeView
 
         Gtk::Image *imageAvailable;
         Gtk::Label *labelAvailable;
+        const char *goodsSection;
 };
 
 #endif // TREEVIEWGOODS_H

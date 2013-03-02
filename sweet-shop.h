@@ -10,6 +10,7 @@
 
 /* Global numeric constants */
 #define ERROR_BUFFER_SIZE               128
+#define COMMAND_BUFFER_SIZE             128
 
 #define WIDGETS_BORDER                  5
 
@@ -17,6 +18,6 @@
 #define DATABASE_PATH                   "data/goods.db"
 #define IMG_WAIT_PATH                   "data/img/wait.gif"
 #define IMG_LAMP_OFF_PATH               "data/img/lamp_off.png"
-#define IMG_LAMP_On_PATH                "data/img/lamp_on.png"
+#define IMG_LAMP_ON_PATH                "data/img/lamp_on.png"
 
 #endif // SWEET_SHOP_H_INCLUDED

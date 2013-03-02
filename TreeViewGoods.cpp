@@ -72,35 +72,53 @@ void TreeViewGoods::check_available()
 {
     sleep( 1 ); // just for lulz :D
 
-    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
-        if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
-            Glib::ustring id = ( *iter )[ treeColumns.id ];
-        }
+    char *query = new char[ COMMAND_BUFFER_SIZE ];
+    char *activated_id = get_activated_id();
+
+    sprintf( query, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
+    g_print("%s\n",query);
+    int available = execute_query_select_available( query );
+
+    if( available ) {
+        imageAvailable->set( IMG_LAMP_ON_PATH );
+        labelAvailable->set_label( "Есть в наличии!" );
+    }
+    else {
+        imageAvailable->set( IMG_LAMP_OFF_PATH );
+        labelAvailable->set_label( "Нет в наличии!" );
     }
 
-    imageAvailable->set( IMG_LAMP_OFF_PATH );
-    labelAvailable->set_label( "Нет в наличии!" );
+    delete[] activated_id;
+    delete[] query;
 }
 
-void TreeViewGoods::set_available( Gtk::Image * image, Gtk::Label * label )
+void TreeViewGoods::set_available( Gtk::Image *image, Gtk::Label *label )
 {
     imageAvailable = image;
     labelAvailable = label;
 }
 
-char *TreeViewGoods::get_activated()
+void TreeViewGoods::set_section( const char *name )
 {
-    char *res;
+    goodsSection = name;
+}
 
+/*****************************************************************************
+ *  Get `id` of the activated item.                                           *
+ ******************************************************************************
+ *  returns: char* - if item activated                                        *
+ *           NULL  - else                                                     *
+  *****************************************************************************/
+
+char *TreeViewGoods::get_activated_id()
+{
     if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
         if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
-            g_print( "selection = %x\niter = %p\n", (int)selection, iter );
             Glib::ustring id = ( *iter )[ treeColumns.id ];
-            res = strdup( id.c_str() );
-            g_print("%s\n", res );
+            return strdup( id.c_str() );
         }
     }
 
-    return res;
+    return NULL;
 }
 

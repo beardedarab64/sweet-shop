@@ -87,7 +87,7 @@ void WindowMain::on_category_choose()
 
 void WindowMain::on_button_buy_activate()
 {
-    char *id = treeGoods.get_activated();
+    char *id = treeGoods.get_activated_id();
     delete[] id;
 }
 
@@ -95,7 +95,7 @@ void WindowMain::get_goodslist( const char *type )
 {
     char *command = new char[ COMMAND_TEXT_BUFFER ];
     sprintf( command, "SELECT id, name, price, item FROM %s;", type);
-    std::vector<GoodsRecord> *res = execute_query_select( command );
+    std::vector<GoodsRecord> *res = execute_query_select_goods( command );
 
     for( unsigned int i = 0; i < res->size(); i++ ) {
         treeGoods.append_data( res->at( i ) );
@@ -108,21 +108,24 @@ void WindowMain::get_goodslist( const char *type )
 void WindowMain::load_from_db()
 {
     treeGoods.remove_all_rows();
+    const char *section;
 
     /* And load new data from database */
     if( radioCakes.get_active() ) {
-        get_goodslist( "Cakes" );
+        section = "Cakes";
     }
     else if( radioCandy.get_active() ) {
-        get_goodslist( "Candy" );
+        section = "Candy";
     }
     else if( radioCoockies.get_active() ) {
-        get_goodslist( "Coockies" );
+        section = "Coockies";
     }
     else if( radioJujube.get_active() ) {
-        get_goodslist( "Jujube" );
+        section = "Jujube";
     }
 
+    treeGoods.set_section( section );
+    get_goodslist( section );
     imageAvailable.clear();
     labelAvailable.set_label( "Загружено!" );
 }
