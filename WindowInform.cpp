@@ -1,6 +1,10 @@
 #include "WindowInform.h"
 #include "sweet-shop.h"
 
+/*****************************************************************************
+ * Creating window and it's components.                                       *
+  *****************************************************************************/
+
 WindowInform::WindowInform()
 {
     set_title( WINDOW_INFORM_TITLE );

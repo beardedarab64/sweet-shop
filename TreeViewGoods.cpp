@@ -1,7 +1,10 @@
 #include "TreeViewGoods.h"
 #include "WindowInform.h"
-#include "sweet-shop.h"
 #include <stdio.h>
+
+/*****************************************************************************
+ * Creating columns for goods description.                                    *
+  *****************************************************************************/
 
 TreeViewGoods::TreeViewGoods()
 {
@@ -26,17 +29,39 @@ TreeViewGoods::TreeViewGoods()
     signal_button_press_event().connect( sigc::mem_fun( *this, &TreeViewGoods::on_button_press_event ), false );
 }
 
+/*****************************************************************************
+ * Clear list of goods.                                                       *
+  *****************************************************************************/
+
 void TreeViewGoods::remove_all_rows()
 {
     treeRecords->clear();
 }
+
+/*****************************************************************************
+ * Adding new record to the goods list.                                       *
+ ******************************************************************************
+ *  takes: struct GoodsRecord - record data;                                  *
+  *****************************************************************************/
 
 void TreeViewGoods::append_data( GoodsRecord src )
 {
     append_data( src.id, src.name, src.price, src.item );
 }
 
-void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ustring price, Glib::ustring item )
+/*****************************************************************************
+ * Adding new record to the goods list (as above).                            *
+ ******************************************************************************
+ *  takes: ustring - product id;                                              *
+ *         ustring - product name;                                            *
+ *         ustring - price;                                                   *
+ *         ustring - item (unit of measurement);                              *
+  *****************************************************************************/
+
+void TreeViewGoods::append_data( Glib::ustring id,
+                                 Glib::ustring name,
+                                 Glib::ustring price,
+                                 Glib::ustring item )
 {
     /* Add new row and put data in it */
     Gtk::TreeModel::Row row = *( treeRecords->append() );
@@ -46,11 +71,19 @@ void TreeViewGoods::append_data( Glib::ustring id, Glib::ustring name, Glib::ust
     row[ treeColumns.item ] = item;
 }
 
+/*****************************************************************************
+ * Creating new window with product description.                              *
+  *****************************************************************************/
+
 void TreeViewGoods::on_menu_file_popup_generic()
 {
     WindowInform information;
-    // x3
+    /* TODO: Make this window! */
 }
+
+/*****************************************************************************
+ * Button press handler. Starts when one of items clicked.                    *
+  *****************************************************************************/
 
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 {
@@ -68,22 +101,26 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
     return return_value;
 }
 
+/*****************************************************************************
+ * Check is product exist.                                                    *
+  *****************************************************************************/
+
 void TreeViewGoods::check_available()
 {
-    sleep( 1 ); // just for lulz :D
+    usleep( 500000 ); // just for lulz :D - 0,5s
 
     char *query = new char[ COMMAND_BUFFER_SIZE ];
     char *activated_id = get_activated_id();
 
     sprintf( query, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
-    g_print("%s\n",query);
     int available = execute_query_select_available( query );
 
     if( available ) {
+        is_available = true;
         imageAvailable->set( IMG_LAMP_ON_PATH );
         labelAvailable->set_label( "Есть в наличии!" );
-    }
-    else {
+    } else {
+        is_available = true;
         imageAvailable->set( IMG_LAMP_OFF_PATH );
         labelAvailable->set_label( "Нет в наличии!" );
     }
@@ -92,11 +129,23 @@ void TreeViewGoods::check_available()
     delete[] query;
 }
 
+/*****************************************************************************
+ * Set some variables.                                                        *
+ ******************************************************************************
+ *  %bicycle%                                                                 *
+  *****************************************************************************/
+
 void TreeViewGoods::set_available( Gtk::Image *image, Gtk::Label *label )
 {
     imageAvailable = image;
     labelAvailable = label;
 }
+
+/*****************************************************************************
+ * Setting name of the current choosed section.                               *
+ ******************************************************************************
+ *  takes: char* - section name;                                              *
+  *****************************************************************************/
 
 void TreeViewGoods::set_section( const char *name )
 {
@@ -104,7 +153,7 @@ void TreeViewGoods::set_section( const char *name )
 }
 
 /*****************************************************************************
- *  Get `id` of the activated item.                                           *
+ * Get `id` of the activated item.                                            *
  ******************************************************************************
  *  returns: char* - if item activated                                        *
  *           NULL  - else                                                     *

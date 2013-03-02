@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <vector>
 
+/*****************************************************************************
+ * Creating window and it's components.                                       *
+  *****************************************************************************/
+
 WindowMain::WindowMain()
 {
     /* Main window preferences */
@@ -68,6 +72,13 @@ WindowMain::WindowMain()
     statusbarMain.push( "Готовы к покупкам? :)" );
 }
 
+/*****************************************************************************
+ * Creating category of goods.                                                *
+ ******************************************************************************
+ *  takes: RadioButton - button object;                                       *
+ *         char* - button label;                                              *
+  *****************************************************************************/
+
 void WindowMain::create_category( Gtk::RadioButton &radio, const char *label )
 {
     /* Create a radiobutton and connect signal */
@@ -77,40 +88,39 @@ void WindowMain::create_category( Gtk::RadioButton &radio, const char *label )
     radio.set_label( label );
 }
 
+/*****************************************************************************
+ * Action on category choose. Starts when on of categories was choosed.       *
+  *****************************************************************************/
+
 void WindowMain::on_category_choose()
 {
-    /* Loading data from database (in different thread) */
     labelAvailable.set_label( "Загрузка..." );
     imageAvailable.set( IMG_WAIT_PATH );
-    Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::load_from_db ) );
+
+    /* Loading will be in a separate thread */
+    Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::fill_goodslist ) );
 }
+
+/*****************************************************************************
+ * Action on buy button activate.                                             *
+  *****************************************************************************/
 
 void WindowMain::on_button_buy_activate()
 {
     char *id = treeGoods.get_activated_id();
     delete[] id;
+    /** TODO: Make this!!! **/
 }
 
-void WindowMain::get_goodslist( const char *type )
-{
-    char *command = new char[ COMMAND_TEXT_BUFFER ];
-    sprintf( command, "SELECT id, name, price, item FROM %s;", type);
-    std::vector<GoodsRecord> *res = execute_query_select_goods( command );
+/*****************************************************************************
+ * Fill the list of goods depending on the category selected.                 *
+  *****************************************************************************/
 
-    for( unsigned int i = 0; i < res->size(); i++ ) {
-        treeGoods.append_data( res->at( i ) );
-    }
-
-    delete[] command;
-    delete res;
-}
-
-void WindowMain::load_from_db()
+void WindowMain::fill_goodslist()
 {
     treeGoods.remove_all_rows();
     const char *section;
 
-    /* And load new data from database */
     if( radioCakes.get_active() ) {
         section = "Cakes";
     }
@@ -124,11 +134,24 @@ void WindowMain::load_from_db()
         section = "Jujube";
     }
 
-    treeGoods.set_section( section );
-    get_goodslist( section );
+    char *command = new char[ COMMAND_TEXT_BUFFER ];
+    sprintf( command, "SELECT `id`, `name`, `price`, `item` FROM `%s`;", section );
+    std::vector<GoodsRecord> *res = execute_query_select_goods( command );
+    delete[] command;
+
+    for( unsigned int i = 0; i < res->size(); i++ ) {
+        treeGoods.append_data( res->at( i ) );
+    }
+
+    delete res;
     imageAvailable.clear();
+    treeGoods.set_section( section );
     labelAvailable.set_label( "Загружено!" );
 }
+
+/*****************************************************************************
+ * Close application.                                                         *
+  *****************************************************************************/
 
 void WindowMain::quit()
 {

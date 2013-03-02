@@ -2,6 +2,15 @@
 #include "sweet-shop.h"
 #include <cstdlib>
 
+/*****************************************************************************
+ * Open SQL database place on local disk.                                     *
+ ******************************************************************************
+ *  takes: char* - file name;                                                 *
+ ******************************************************************************
+ *  returns: char* - if item activated;                                       *
+ *           NULL  - else;                                                    *
+  *****************************************************************************/
+
 sqlite3 *open_database( const char *filename )
 {
     sqlite3 *database;
@@ -15,10 +24,21 @@ sqlite3 *open_database( const char *filename )
     }
 }
 
+/*****************************************************************************
+ * Saving all changes and closing database.                                   *
+ ******************************************************************************
+ *  takes: sqlite3* - database descriptor;                                    *
+  *****************************************************************************/
+
 void close_database( sqlite3 *database )
 {
+    sqlite3_exec( database,"COMMIT TRANSACTION RESTOREPOINT;", NULL, NULL, NULL );
     sqlite3_close( database );
 }
+
+/*****************************************************************************
+ * Callback for `execute_query_select_goods()` function below.                *
+  *****************************************************************************/
 
 int select_goods_callback( void *result, int argc, char **argv, char **col )
 {
@@ -36,6 +56,14 @@ int select_goods_callback( void *result, int argc, char **argv, char **col )
 
     return EXIT_SUCCESS;
 }
+
+/*****************************************************************************
+ * Select goods from the database table.                                      *
+ ******************************************************************************
+ *  takes: char* - query;                                                     *
+ ******************************************************************************
+ *  returns: vector* - goods array;                                           *
+  *****************************************************************************/
 
 std::vector<GoodsRecord> *execute_query_select_goods( const char *query )
 {
@@ -55,6 +83,10 @@ std::vector<GoodsRecord> *execute_query_select_goods( const char *query )
     return result;
 }
 
+/*****************************************************************************
+ * Callback for `execute_query_available()` function below.                   *
+  *****************************************************************************/
+
 int select_available_callback( void *result, int argc, char **argv, char **col )
 {
     int *res = (int *) result;
@@ -70,6 +102,15 @@ int select_available_callback( void *result, int argc, char **argv, char **col )
     return EXIT_SUCCESS;
 }
 
+/*****************************************************************************
+ * Check available of some product in the database.                           *
+ ******************************************************************************
+ *  takes: char* - query;                                                     *
+ ******************************************************************************
+ *  returns: int = 1 - if available;                                          *
+ *           int = 0 - else;                                                  *
+  *****************************************************************************/
+
 int execute_query_select_available( const char *query )
 {
     sqlite3 *database = open_database( DATABASE_PATH );
@@ -78,34 +119,14 @@ int execute_query_select_available( const char *query )
 
     if( database != NULL ) {
         sqlite3_exec( database, query, select_available_callback, &result, &errmsg );
-        close_database( database );
+
         if( errmsg != NULL ) {
             g_warning( "SQL: %s\n", errmsg );
         }
+
+        close_database( database );
     }
 
     return result;
-}
-
-char *execute_query_insert( const char *query )
-{
-    char *errmsg;
-    sqlite3 *database = open_database( DATABASE_PATH );
-
-    if( database != NULL ) {
-        if( sqlite3_exec( database, query, NULL, NULL, &errmsg ) == SQLITE_OK ) {
-            close_database( database );
-            if( errmsg != NULL ) {
-                g_warning( "SQL: %s\n", errmsg );
-            }
-        }
-        else {
-            close_database( database );
-            return errmsg;
-        }
-    }
-
-    delete[] errmsg;
-    return NULL;
 }
 

@@ -1,6 +1,8 @@
 #ifndef SWEET_SHOP_H_INCLUDED
 #define SWEET_SHOP_H_INCLUDED
 
+#include <glibmm.h>
+
 /* Program unique name */
 #define APP_NAME                        "com.sweet-shop"
 
@@ -19,5 +21,19 @@
 #define IMG_WAIT_PATH                   "data/img/wait.gif"
 #define IMG_LAMP_OFF_PATH               "data/img/lamp_off.png"
 #define IMG_LAMP_ON_PATH                "data/img/lamp_on.png"
+
+/* User's types */
+typedef struct GoodsRecord_t {
+    Glib::ustring id;
+    Glib::ustring name;
+    Glib::ustring price;
+    Glib::ustring item;
+} GoodsRecord;
+
+typedef struct PurchasesRecord_t {
+    Glib::ustring name;
+    Glib::ustring count;
+    Glib::ustring cost;
+} PurchasesRecord;
 
 #endif // SWEET_SHOP_H_INCLUDED

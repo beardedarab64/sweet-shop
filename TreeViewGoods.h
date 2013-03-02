@@ -3,6 +3,7 @@
 
 #include <gtkmm.h>
 #include "GoodsColumns.h"
+#include "sweet-shop.h"
 #include "database.h"
 
 class TreeViewGoods: public Gtk::TreeView
@@ -26,6 +27,7 @@ class TreeViewGoods: public Gtk::TreeView
         GoodsColumns treeColumns;
         Glib::RefPtr<Gtk::ListStore> treeRecords;
 
+        bool is_available;
         Gtk::Image *imageAvailable;
         Gtk::Label *labelAvailable;
         const char *goodsSection;

@@ -3,12 +3,14 @@
 
 #include <gtkmm.h>
 #include "PurchasesColumns.h"
+#include "sweet-shop.h"
 
 class TreeViewPurchases: public Gtk::TreeView
 {
     public:
         TreeViewPurchases();
         void remove_all_rows();
+        void append_data( PurchasesRecord );
         void append_data( Glib::ustring, Glib::ustring, Glib::ustring );
 
     private:
