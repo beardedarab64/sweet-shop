@@ -75,7 +75,6 @@ WindowMain::WindowMain()
     boxRegister.set_size_request( 110 );
 
     boxRegister.pack_start( labelTotal, false, false, WIDGETS_BORDER );
-    floatTotal = 0;
 
     boxRegister.pack_start( buttonRegister, false, false, WIDGETS_BORDER );
     buttonRegister.set_label( "\nОФОРМИТЬ\n" );
@@ -164,6 +163,7 @@ void WindowMain::on_button_buy_activate()
 
 void WindowMain::on_button_cancel_activate()
 {
+    floatTotal = 0;
     treePurchases.remove_all_rows();
     statusbarMain.push( "Отменено..." );
     labelTotal.set_text( "Итого: 0,00 грн" );
