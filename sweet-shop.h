@@ -21,6 +21,7 @@
 #define IMG_WAIT_PATH                   "data/img/wait.gif"
 #define IMG_LAMP_OFF_PATH               "data/img/lamp_off.png"
 #define IMG_LAMP_ON_PATH                "data/img/lamp_on.png"
+#define WINDOW_MAIN_ICON                "data/img/icon.png"
 
 /* User's types */
 typedef struct GoodsRecord_t {

@@ -3,8 +3,8 @@
 #include "database.h"
 #include <gtkmm.h>
 #include <cstring>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
 #include <vector>
 
 /*****************************************************************************
@@ -14,9 +14,10 @@
 WindowMain::WindowMain()
 {
     /* Main window preferences */
+    set_icon_from_file( WINDOW_MAIN_ICON );
+    set_border_width( WIDGETS_BORDER );
     set_title( WINDOW_MAIN_TITLE );
     set_default_size( 900, 400 );
-    set_border_width( WIDGETS_BORDER );
 
     add( boxWindow );
     boxWindow.set_orientation( Gtk::ORIENTATION_VERTICAL );
@@ -99,14 +100,17 @@ void WindowMain::on_button_buy_activate()
     char *section = treeGoods.get_section();
     char *id = treeGoods.get_activated_id();
 
-    char *query = new char[ COMMAND_BUFFER_SIZE ];
+    char query[ COMMAND_BUFFER_SIZE ];
     sprintf( query, "SELECT `id`, `name`, `price`, `item` FROM `%s` WHERE `id` LIKE '%s';", section, id );
     std::vector<GoodsRecord> *res = execute_query_select_goods( query );
 
     if( res->size() ) {
         if( treeGoods.get_is_available() ) {
-            statusbarMain.push( "Добавлено в чек. Это было не просто." );
-            treePurchases.append_data( res->at(0).name, res->at(0).id, res->at(0).price );
+            Glib::ustring count = entryCount.get_text();
+            //Glib::ustring cost = itoa( atoi( count.c_str() ) * atoi( res->at(0).price.c_str() ) );
+
+            //treePurchases.append_data( res->at(0).name, count, cost );
+            statusbarMain.push( "Добавлено в чек." );
         } else {
             statusbarMain.push( "Данного товара нет в наличии!" );
         }
