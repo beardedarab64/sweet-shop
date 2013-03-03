@@ -9,10 +9,9 @@ WindowInform::WindowInform()
 {
     set_title( WINDOW_INFORM_TITLE );
     set_border_width( WIDGETS_BORDER );
-    set_default_size( 300, 200 );
+    set_modal();
 
-    add( boxWindow );
-
-    show();
+    add_label( "Немного описания, например..." );
+    add_button( "Закрыть", 0 );
 }
 

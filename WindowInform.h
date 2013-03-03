@@ -3,13 +3,13 @@
 
 #include <gtkmm.h>
 
-class WindowInform: public Gtk::Window
+class WindowInform: public Gtk::Dialog
 {
     public:
         WindowInform();
 
     private:
-        Gtk::Box boxWindow;
+        Gtk::Button buttonOk;
 };
 
 #endif // WINDOWINFORM_H

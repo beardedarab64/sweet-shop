@@ -39,7 +39,7 @@ void TreeViewGoods::remove_all_rows()
 }
 
 /*****************************************************************************
- * Adding new record to the goods list.                                       *
+ * Adding new record to the goods list (overloaded).                          *
  ******************************************************************************
  *  takes: struct GoodsRecord - record data;                                  *
   *****************************************************************************/
@@ -78,6 +78,7 @@ void TreeViewGoods::append_data( Glib::ustring id,
 void TreeViewGoods::on_menu_file_popup_generic()
 {
     WindowInform information;
+    information.run();
     /* TODO: Make this window! */
 }
 
@@ -87,8 +88,6 @@ void TreeViewGoods::on_menu_file_popup_generic()
 
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 {
-    bool return_value = TreeView::on_button_press_event( event );
-
     if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) ) {
         imageAvailable->set( IMG_WAIT_PATH );
         labelAvailable->set_label( "Проверка наличия..." );
@@ -98,7 +97,7 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
         menuPopup.popup( event->button, event->time );
     }
 
-    return return_value;
+    return TreeView::on_button_press_event( event );
 }
 
 /*****************************************************************************
