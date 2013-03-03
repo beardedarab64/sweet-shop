@@ -9,6 +9,7 @@
 /* Window's titles */
 #define WINDOW_MAIN_TITLE               "Sweet Shop"
 #define WINDOW_INFORM_TITLE             "Подробности"
+#define WINDOW_REGISTER_TITLE           "Подтвержение покупки"
 
 /* Global numeric constants */
 #define ERROR_BUFFER_SIZE               128

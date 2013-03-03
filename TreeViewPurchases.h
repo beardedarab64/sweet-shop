@@ -12,6 +12,7 @@ class TreeViewPurchases: public Gtk::TreeView
         void remove_all_rows();
         void append_data( PurchasesRecord & );
         void append_data( Glib::ustring &, Glib::ustring &, Glib::ustring & );
+        int get_count();
 
     protected:
         bool on_button_press_event( GdkEventButton * );
@@ -19,9 +20,10 @@ class TreeViewPurchases: public Gtk::TreeView
 
     private:
         Gtk::Menu menuPopup;
-
+        int countOfProducts;
         PurchasesColumns treeColumns;
         Glib::RefPtr<Gtk::ListStore> treeRecords;
 };
 
 #endif // TREEVIEWPURCHASES_H
+

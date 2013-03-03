@@ -14,6 +14,7 @@ class WindowMain: public Gtk::Window
         void create_category( Gtk::RadioButton &, const char * );
         void on_button_buy_activate();
         void on_button_cancel_activate();
+        void on_button_register_activate();
         void on_category_choose();
         void fill_goodslist();
         void quit();
@@ -45,8 +46,8 @@ class WindowMain: public Gtk::Window
         TreeViewPurchases treePurchases;
 
         Gtk::Box boxRegister;
-        Gtk::Label labelTotal;
         float floatTotal;
+        Gtk::Label labelTotal;
         Gtk::Button buttonRegister;
         Gtk::Button buttonCancel;
 };

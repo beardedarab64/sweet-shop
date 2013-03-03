@@ -6,11 +6,11 @@ RM = rm -rf
 
 SOURCES = sweet-shop.cpp WindowMain.cpp TreeViewGoods.cpp GoodsColumns.cpp \
           database.cpp TreeViewPurchases.cpp PurchasesColumns.cpp \
-          WindowInform.cpp lib.cpp
+          WindowInform.cpp lib.cpp WindowRegister.cpp
 
 OBJECTS = sweet-shop.o WindowMain.o TreeViewGoods.o GoodsColumns.o \
           database.o TreeViewPurchases.o PurchasesColumns.o \
-          WindowInform.o lib.o
+          WindowInform.o lib.o WindowRegister.o
 
 EXECUTABLE = sweet-shop
 
@@ -21,7 +21,7 @@ sweet-shop.o: sweet-shop.cpp sweet-shop.h WindowMain.h
 	$(CC) $(CFLAGS) sweet-shop.cpp
 
 WindowMain.o: WindowMain.cpp WindowMain.h TreeViewGoods.h TreeViewPurchases.h \
-              sweet-shop.h lib.h
+              sweet-shop.h lib.h WindowRegister.h
 	$(CC) $(CFLAGS) WindowMain.cpp
 
 TreeViewGoods.o: TreeViewGoods.cpp TreeViewGoods.h GoodsColumns.h database.h \
@@ -46,6 +46,9 @@ WindowInform.o: WindowInform.cpp WindowInform.h database.h sweet-shop.h
 
 lib.o: lib.cpp lib.h
 	$(CC) $(CFLAGS) lib.cpp
+
+WindowRegister.o: WindowRegister.cpp WindowRegister.h sweet-shop.h
+	$(CC) $(CFLAGS) WindowRegister.cpp
 
 clean:
 	$(RM) $(OBJECTS) $(EXECUTABLE)

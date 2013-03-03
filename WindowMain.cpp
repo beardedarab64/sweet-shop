@@ -1,3 +1,4 @@
+#include "WindowRegister.h"
 #include "WindowMain.h"
 #include "sweet-shop.h"
 #include "database.h"
@@ -18,7 +19,7 @@ WindowMain::WindowMain()
     set_icon_from_file( WINDOW_MAIN_ICON );
     set_border_width( WIDGETS_BORDER );
     set_title( WINDOW_MAIN_TITLE );
-    set_default_size( 900, 500 );
+    set_default_size( 960, 480 );
 
     add( boxWindow );
     boxWindow.set_orientation( Gtk::ORIENTATION_VERTICAL );
@@ -53,6 +54,7 @@ WindowMain::WindowMain()
     boxBuy.pack_start( *(new Gtk::Separator), false, false, WIDGETS_BORDER );
     boxBuy.pack_start( *(new Gtk::Label( "Количество:" )), false, false, WIDGETS_BORDER );
     boxBuy.pack_start( entryCount, false, false, WIDGETS_BORDER );
+    entryCount.signal_activate().connect( sigc::mem_fun( *this, &WindowMain::on_button_buy_activate ) );
     entryCount.set_text( "1" );
 
     boxBuy.pack_start( buttonBuy, false, false, WIDGETS_BORDER );
@@ -77,6 +79,7 @@ WindowMain::WindowMain()
 
     boxRegister.pack_start( buttonRegister, false, false, WIDGETS_BORDER );
     buttonRegister.set_label( "\nОФОРМИТЬ\n" );
+    buttonRegister.signal_clicked().connect( sigc::mem_fun( *this, &WindowMain::on_button_register_activate ) );
 
     boxRegister.pack_start( buttonCancel, false, false, WIDGETS_BORDER );
     buttonCancel.set_label( "Отмена" );
@@ -130,11 +133,11 @@ void WindowMain::on_button_buy_activate()
                 f_cost *= strtof( res->at(0).price.c_str(), NULL );
 
                 char buffer[48];
-                sprintf( buffer, "%4.2f", f_cost );
+                sprintf( buffer, "%.2f грн", f_cost );
                 Glib::ustring cost( buffer );
 
                 floatTotal += f_cost;
-                sprintf( buffer, "Итого:  %4.2f грн", floatTotal );
+                sprintf( buffer, "Итого:  %.2f грн", floatTotal );
                 labelTotal.set_text( buffer );
 
                 treePurchases.append_data( res->at(0).name, count, cost );
@@ -163,7 +166,27 @@ void WindowMain::on_button_cancel_activate()
 {
     treePurchases.remove_all_rows();
     statusbarMain.push( "Отменено..." );
-    labelTotal.set_text( "Итого: 0 грн" );
+    labelTotal.set_text( "Итого: 0,00 грн" );
+}
+
+/*****************************************************************************
+ * Action on register button activate.                                        *
+  *****************************************************************************/
+
+void WindowMain::on_button_register_activate()
+{
+    if( treePurchases.get_count() != 0 ) {
+        WindowRegister reg;
+        int response = reg.run();
+
+        if( response == 0 ) {
+            /* there may be save data or something else... */
+            on_button_cancel_activate();
+            statusbarMain.push( "Готово!" );
+        }
+    } else {
+        statusbarMain.push( "Нечего оформлять!" );
+    }
 }
 
 /*****************************************************************************

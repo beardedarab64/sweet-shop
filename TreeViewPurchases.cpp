@@ -9,6 +9,7 @@ TreeViewPurchases::TreeViewPurchases()
     /* Create tree */
     treeRecords = Gtk::ListStore::create( treeColumns );
     set_model( treeRecords );
+    countOfProducts = 0;
 
     /* Create columns */
     append_column( "Наименование", treeColumns.name );
@@ -33,6 +34,7 @@ TreeViewPurchases::TreeViewPurchases()
 void TreeViewPurchases::remove_all_rows()
 {
     treeRecords->clear();
+    countOfProducts = 0;
 }
 
 /*****************************************************************************
@@ -63,6 +65,18 @@ void TreeViewPurchases::append_data( Glib::ustring &name,
     row[ treeColumns.name ] = name;
     row[ treeColumns.count ] = count;
     row[ treeColumns.cost ] = cost;
+    countOfProducts++;
+}
+
+/*****************************************************************************
+ * Get count of a products in purchases list.                                 *
+ ******************************************************************************
+ *  returns: int - count of products;                                         *
+  *****************************************************************************/
+
+int TreeViewPurchases::get_count()
+{
+    return countOfProducts;
 }
 
 /*****************************************************************************
