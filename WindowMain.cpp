@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <vector>
+#include "lib.h"
 
 /*****************************************************************************
  * Creating window and it's components.                                       *
@@ -107,10 +108,16 @@ void WindowMain::on_button_buy_activate()
     if( res->size() ) {
         if( treeGoods.get_is_available() ) {
             Glib::ustring count = entryCount.get_text();
-            //Glib::ustring cost = itoa( atoi( count.c_str() ) * atoi( res->at(0).price.c_str() ) );
-
-            //treePurchases.append_data( res->at(0).name, count, cost );
-            statusbarMain.push( "Добавлено в чек." );
+            if( is_number( count.c_str() ) ) {
+                char c_cost[16];
+                sprintf( c_cost, "%4.2f", atoi( count.c_str() ) * strtof( res->at(0).price.c_str(), NULL ) );
+                Glib::ustring cost( c_cost );
+                treePurchases.append_data( res->at(0).name, count, cost );
+                statusbarMain.push( "Добавлено в чек." );
+            } else {
+                entryCount.set_text( "1" );
+                statusbarMain.push( "Введите нормальное количество!" );
+            }
         } else {
             statusbarMain.push( "Данного товара нет в наличии!" );
         }
