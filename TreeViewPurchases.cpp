@@ -14,6 +14,16 @@ TreeViewPurchases::TreeViewPurchases()
     append_column( "Наименование", treeColumns.name );
     append_column( "Кол-во", treeColumns.count );
     append_column( "Стоимость", treeColumns.cost );
+
+    /* Create popup menu */
+    Gtk::MenuItem* item = Gtk::manage( new Gtk::MenuItem( "Удалить" ) );
+    item->signal_activate().connect( sigc::mem_fun( *this, &TreeViewPurchases::on_menu_file_popup_generic ) );
+    menuPopup.append( *item );
+    menuPopup.accelerate( *this );
+    menuPopup.show_all();
+
+    /* Connect press event signal (mouse clicks) */
+    signal_button_press_event().connect( sigc::mem_fun( *this, &TreeViewPurchases::on_button_press_event ), false );
 }
 
 /*****************************************************************************
@@ -53,5 +63,31 @@ void TreeViewPurchases::append_data( Glib::ustring &name,
     row[ treeColumns.name ] = name;
     row[ treeColumns.count ] = count;
     row[ treeColumns.cost ] = cost;
+}
+
+/*****************************************************************************
+ * Removing product from list.                                                *
+  *****************************************************************************/
+
+void TreeViewPurchases::on_menu_file_popup_generic()
+{
+    if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
+        if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
+            treeRecords->erase( iter );
+        }
+    }
+}
+
+/*****************************************************************************
+ * Button press handler. Starts when one of items clicked.                    *
+  *****************************************************************************/
+
+bool TreeViewPurchases::on_button_press_event( GdkEventButton *event )
+{
+    if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 3 ) ) {
+        menuPopup.popup( event->button, event->time );
+    }
+
+    return TreeView::on_button_press_event( event );
 }
 

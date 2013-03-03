@@ -13,7 +13,13 @@ class TreeViewPurchases: public Gtk::TreeView
         void append_data( PurchasesRecord & );
         void append_data( Glib::ustring &, Glib::ustring &, Glib::ustring & );
 
+    protected:
+        bool on_button_press_event( GdkEventButton * );
+        void on_menu_file_popup_generic();
+
     private:
+        Gtk::Menu menuPopup;
+
         PurchasesColumns treeColumns;
         Glib::RefPtr<Gtk::ListStore> treeRecords;
 };

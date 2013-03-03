@@ -115,7 +115,6 @@ void WindowMain::on_button_buy_activate()
                 treePurchases.append_data( res->at(0).name, count, cost );
                 statusbarMain.push( "Добавлено в чек." );
             } else {
-                entryCount.set_text( "1" );
                 statusbarMain.push( "Введите нормальное количество!" );
             }
         } else {
@@ -125,6 +124,7 @@ void WindowMain::on_button_buy_activate()
         statusbarMain.push( "Ничего не выбрано!" );
     }
 
+    entryCount.set_text( "1" );
     delete[] section;
     delete[] id;
     delete res;
