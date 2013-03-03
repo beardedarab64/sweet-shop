@@ -46,8 +46,10 @@ WindowMain::WindowMain()
 
     boxBuy.pack_start( imageAvailable, false, false, WIDGETS_BORDER );
     imageAvailable.set_size_request( 72, 72 );
-
     boxBuy.pack_start( labelAvailable, false, false, WIDGETS_BORDER );
+
+    boxBuy.pack_start( *(new Gtk::Separator), false, false, WIDGETS_BORDER );
+    boxBuy.pack_start( *(new Gtk::Label( "Количество:" )), false, false, WIDGETS_BORDER );
     boxBuy.pack_start( entryCount, false, false, WIDGETS_BORDER );
     entryCount.set_text( "1" );
 
@@ -89,6 +91,35 @@ void WindowMain::create_category( Gtk::RadioButton &radio, const char *label )
 }
 
 /*****************************************************************************
+ * Action on buy button activate.                                             *
+  *****************************************************************************/
+
+void WindowMain::on_button_buy_activate()
+{
+    char *section = treeGoods.get_section();
+    char *id = treeGoods.get_activated_id();
+
+    char *query = new char[ COMMAND_BUFFER_SIZE ];
+    sprintf( query, "SELECT `id`, `name`, `price`, `item` FROM `%s` WHERE `id` LIKE '%s';", section, id );
+    std::vector<GoodsRecord> *res = execute_query_select_goods( query );
+
+    if( res->size() ) {
+        if( treeGoods.get_is_available() ) {
+            statusbarMain.push( "Добавлено в чек. Это было не просто." );
+            treePurchases.append_data( res->at(0).name, res->at(0).id, res->at(0).price );
+        } else {
+            statusbarMain.push( "Данного товара нет в наличии!" );
+        }
+    } else {
+        statusbarMain.push( "Ничего не выбрано!" );
+    }
+
+    delete[] section;
+    delete[] id;
+    delete res;
+}
+
+/*****************************************************************************
  * Action on category choose. Starts when on of categories was choosed.       *
   *****************************************************************************/
 
@@ -99,17 +130,6 @@ void WindowMain::on_category_choose()
 
     /* Loading will be in a separate thread */
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::fill_goodslist ) );
-}
-
-/*****************************************************************************
- * Action on buy button activate.                                             *
-  *****************************************************************************/
-
-void WindowMain::on_button_buy_activate()
-{
-    char *id = treeGoods.get_activated_id();
-    delete[] id;
-    /** TODO: Make this!!! **/
 }
 
 /*****************************************************************************
@@ -134,16 +154,16 @@ void WindowMain::fill_goodslist()
         section = "Jujube";
     }
 
-    char *command = new char[ COMMAND_TEXT_BUFFER ];
+    char *command = new char[ COMMAND_BUFFER_SIZE ];
     sprintf( command, "SELECT `id`, `name`, `price`, `item` FROM `%s`;", section );
     std::vector<GoodsRecord> *res = execute_query_select_goods( command );
-    delete[] command;
 
     for( unsigned int i = 0; i < res->size(); i++ ) {
         treeGoods.append_data( res->at( i ) );
     }
 
     delete res;
+    delete[] command;
     imageAvailable.clear();
     treeGoods.set_section( section );
     labelAvailable.set_label( "Загружено!" );

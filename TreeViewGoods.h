@@ -11,12 +11,18 @@ class TreeViewGoods: public Gtk::TreeView
     public:
         TreeViewGoods();
         void remove_all_rows();
-        void append_data( GoodsRecord );
-        void append_data( Glib::ustring, Glib::ustring, Glib::ustring, Glib::ustring );
-        void check_available();
+
+        void append_data( GoodsRecord & );
+        void append_data( Glib::ustring &, Glib::ustring &, Glib::ustring &, Glib::ustring & );
+
         void set_available( Gtk::Image *, Gtk::Label * );
         void set_section( const char * );
+
+        void check_available();
+
+        char *get_section();
         char *get_activated_id();
+        bool get_is_available();
 
     protected:
         bool on_button_press_event( GdkEventButton * );

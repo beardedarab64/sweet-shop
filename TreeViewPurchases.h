@@ -10,8 +10,8 @@ class TreeViewPurchases: public Gtk::TreeView
     public:
         TreeViewPurchases();
         void remove_all_rows();
-        void append_data( PurchasesRecord );
-        void append_data( Glib::ustring, Glib::ustring, Glib::ustring );
+        void append_data( PurchasesRecord & );
+        void append_data( Glib::ustring &, Glib::ustring &, Glib::ustring & );
 
     private:
         PurchasesColumns treeColumns;

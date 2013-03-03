@@ -31,7 +31,7 @@ void TreeViewPurchases::remove_all_rows()
  *  takes: struct PurchasesRecord - record data;                              *
   *****************************************************************************/
 
-void TreeViewPurchases::append_data( PurchasesRecord src )
+void TreeViewPurchases::append_data( PurchasesRecord &src )
 {
     append_data( src.name, src.count, src.cost );
 }
@@ -44,9 +44,9 @@ void TreeViewPurchases::append_data( PurchasesRecord src )
  *         ustring - total cost;                                              *
   *****************************************************************************/
 
-void TreeViewPurchases::append_data( Glib::ustring name,
-                                     Glib::ustring count,
-                                     Glib::ustring cost )
+void TreeViewPurchases::append_data( Glib::ustring &name,
+                                     Glib::ustring &count,
+                                     Glib::ustring &cost )
 {
     /* Add new row and put data in it */
     Gtk::TreeModel::Row row = *( treeRecords->append() );

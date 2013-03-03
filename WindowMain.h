@@ -5,8 +5,6 @@
 #include "TreeViewGoods.h"
 #include "TreeViewPurchases.h"
 
-#define COMMAND_TEXT_BUFFER 128
-
 class WindowMain: public Gtk::Window
 {
     public:
@@ -14,8 +12,8 @@ class WindowMain: public Gtk::Window
 
     protected:
         void create_category( Gtk::RadioButton &, const char * );
-        void on_category_choose();
         void on_button_buy_activate();
+        void on_category_choose();
         void fill_goodslist();
         void quit();
 
