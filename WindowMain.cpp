@@ -195,8 +195,12 @@ void WindowMain::on_button_register_activate()
 
 void WindowMain::on_category_choose()
 {
-    labelAvailable.set_label( "Загрузка..." );
-    imageAvailable.set( IMG_WAIT_PATH );
+    try {
+        labelAvailable.set_label( "Загрузка..." );
+        imageAvailable.set( IMG_WAIT_PATH );
+    } catch(...) {
+        g_warning( "HUSTON, WE HAVE A PROBLEM!" );
+    }
     /* Loading will be in a separate thread */
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::fill_goodslist ) );
 }
@@ -231,11 +235,16 @@ void WindowMain::fill_goodslist()
         treeGoods.append_data( res->at( i ) );
     }
 
+    try {
+        imageAvailable.clear();
+        treeGoods.set_section( section );
+        labelAvailable.set_label( "Загружено!" );
+    } catch(...) {
+        g_warning( "HUSTON, WE HAVE A PROBLEM!" );
+    }
+
     delete res;
     delete[] command;
-    imageAvailable.clear();
-    treeGoods.set_section( section );
-    labelAvailable.set_label( "Загружено!" );
 }
 
 /*****************************************************************************

@@ -140,12 +140,22 @@ void TreeViewGoods::check_available()
 
     if( available ) {
         is_available = true;
-        imageAvailable->set( IMG_LAMP_ON_PATH );
-        labelAvailable->set_label( "Есть в наличии!" );
+
+        try {
+            imageAvailable->set( IMG_LAMP_ON_PATH );
+            labelAvailable->set_label( "Есть в наличии!" );
+        } catch(...) {
+            g_warning( "HUSTON, WE HAVE A PROBLEM!" );
+        }
     } else {
         is_available = false;
-        imageAvailable->set( IMG_LAMP_OFF_PATH );
-        labelAvailable->set_label( "Нет в наличии!" );
+
+        try {
+            imageAvailable->set( IMG_LAMP_OFF_PATH );
+            labelAvailable->set_label( "Нет в наличии!" );
+        } catch(...) {
+            g_warning( "HUSTON, WE HAVE A PROBLEM!" );
+        }
     }
 
     delete[] activated_id;
