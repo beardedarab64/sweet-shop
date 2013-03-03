@@ -18,7 +18,7 @@ WindowMain::WindowMain()
     set_icon_from_file( WINDOW_MAIN_ICON );
     set_border_width( WIDGETS_BORDER );
     set_title( WINDOW_MAIN_TITLE );
-    set_default_size( 900, 400 );
+    set_default_size( 900, 500 );
 
     add( boxWindow );
     boxWindow.set_orientation( Gtk::ORIENTATION_VERTICAL );
@@ -61,11 +61,26 @@ WindowMain::WindowMain()
 
     /* List of purchases */
     boxMain.pack_start( boxPurchase, true, true, WIDGETS_BORDER );
-    boxBuy.set_orientation( Gtk::ORIENTATION_VERTICAL );
+    boxPurchase.set_orientation( Gtk::ORIENTATION_VERTICAL );
 
     boxPurchase.pack_start( scrolledPurchases, true, true, WIDGETS_BORDER );
     scrolledPurchases.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledPurchases.add( treePurchases );
+
+    /* Registration of purchase */
+    boxPurchase.pack_start( boxRegister, false, false, WIDGETS_BORDER );
+    boxRegister.set_orientation( Gtk::ORIENTATION_VERTICAL );
+    boxRegister.set_size_request( 110 );
+
+    boxRegister.pack_start( labelTotal, false, false, WIDGETS_BORDER );
+    floatTotal = 0;
+
+    boxRegister.pack_start( buttonRegister, false, false, WIDGETS_BORDER );
+    buttonRegister.set_label( "\nОФОРМИТЬ\n" );
+
+    boxRegister.pack_start( buttonCancel, false, false, WIDGETS_BORDER );
+    buttonCancel.set_label( "Отмена" );
+    buttonCancel.signal_clicked().connect( sigc::mem_fun( *this, &WindowMain::on_button_cancel_activate ) );
 
     /* Statusbar */
     boxWindow.pack_start( statusbarMain, false, false );
@@ -73,6 +88,7 @@ WindowMain::WindowMain()
     /* Run */
     show_all_children();
     on_category_choose();
+    on_button_cancel_activate();
     statusbarMain.push( "Готовы к покупкам? :)" );
 }
 
@@ -105,13 +121,22 @@ void WindowMain::on_button_buy_activate()
     sprintf( query, "SELECT `id`, `name`, `price`, `item` FROM `%s` WHERE `id` LIKE '%s';", section, id );
     std::vector<GoodsRecord> *res = execute_query_select_goods( query );
 
-    if( res->size() ) {
+    if( res->size() != 0 ) {
         if( treeGoods.get_is_available() ) {
             Glib::ustring count = entryCount.get_text();
+
             if( is_number( count.c_str() ) ) {
-                char c_cost[16];
-                sprintf( c_cost, "%4.2f", atoi( count.c_str() ) * strtof( res->at(0).price.c_str(), NULL ) );
-                Glib::ustring cost( c_cost );
+                float f_cost = strtof( count.c_str(), NULL );
+                f_cost *= strtof( res->at(0).price.c_str(), NULL );
+
+                char buffer[48];
+                sprintf( buffer, "%4.2f", f_cost );
+                Glib::ustring cost( buffer );
+
+                floatTotal += f_cost;
+                sprintf( buffer, "Итого:  %4.2f грн", floatTotal );
+                labelTotal.set_text( buffer );
+
                 treePurchases.append_data( res->at(0).name, count, cost );
                 statusbarMain.push( "Добавлено в чек." );
             } else {
@@ -131,6 +156,17 @@ void WindowMain::on_button_buy_activate()
 }
 
 /*****************************************************************************
+ * Action on cancel button activate.                                          *
+  *****************************************************************************/
+
+void WindowMain::on_button_cancel_activate()
+{
+    treePurchases.remove_all_rows();
+    statusbarMain.push( "Отменено..." );
+    labelTotal.set_text( "Итого: 0 грн" );
+}
+
+/*****************************************************************************
  * Action on category choose. Starts when on of categories was choosed.       *
   *****************************************************************************/
 
@@ -138,7 +174,6 @@ void WindowMain::on_category_choose()
 {
     labelAvailable.set_label( "Загрузка..." );
     imageAvailable.set( IMG_WAIT_PATH );
-
     /* Loading will be in a separate thread */
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::fill_goodslist ) );
 }
