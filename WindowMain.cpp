@@ -130,18 +130,23 @@ void WindowMain::on_button_buy_activate()
 
             if( is_number( count.c_str() ) ) {
                 float f_cost = strtof( count.c_str(), NULL );
-                f_cost *= strtof( res->at(0).price.c_str(), NULL );
 
-                char buffer[48];
-                sprintf( buffer, "%.2f грн", f_cost );
-                Glib::ustring cost( buffer );
+                if( f_cost > 0 ) {
+                    f_cost *= strtof( res->at(0).price.c_str(), NULL );
 
-                floatTotal += f_cost;
-                sprintf( buffer, "Итого:  %.2f грн", floatTotal );
-                labelTotal.set_text( buffer );
+                    char buffer[48];
+                    sprintf( buffer, "%.2f грн", f_cost );
+                    Glib::ustring cost( buffer );
 
-                treePurchases.append_data( res->at(0).name, count, cost );
-                statusbarMain.push( "Добавлено в чек." );
+                    floatTotal += f_cost;
+                    sprintf( buffer, "Итого:  %.2f грн", floatTotal );
+                    labelTotal.set_text( buffer );
+
+                    treePurchases.append_data( res->at(0).name, count, cost );
+                    statusbarMain.push( "Добавлено в чек." );
+                } else {
+                    statusbarMain.push( "Невозможно купить 0 штук! *CRAZY*" );
+                }
             } else {
                 statusbarMain.push( "Введите нормальное количество!" );
             }
