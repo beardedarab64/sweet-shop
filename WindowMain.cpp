@@ -240,6 +240,8 @@ void WindowMain::fill_goodslist()
         treeGoods.append_data( res->at( i ) );
     }
 
+    usleep( 500000 ); // just for lulz :D - 0,5s
+
     treeGoods.set_available_state( "", "Загружено!" );
     treeGoods.set_section( section );
     delete res;

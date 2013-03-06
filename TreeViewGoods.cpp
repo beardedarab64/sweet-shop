@@ -146,14 +146,13 @@ void TreeViewGoods::set_section( const char *name )
 
 void TreeViewGoods::check_available()
 {
-    g_print("section = %s\n",goodsSection);
-    usleep( 500000 ); // just for lulz :D - 0,5s
-
     char *query = new char[ COMMAND_BUFFER_SIZE ];
     char *activated_id = get_activated_id();
 
     sprintf( query, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
     int available = execute_query_select_available( query );
+
+    usleep( 500000 ); // just for lulz :D - 0,5s
 
     if( available ) {
         is_available = true;

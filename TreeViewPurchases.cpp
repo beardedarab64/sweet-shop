@@ -116,6 +116,7 @@ void TreeViewPurchases::on_menu_file_popup_generic()
     if( Glib::RefPtr<Gtk::TreeView::Selection> selection = get_selection() ) {
         if( Gtk::TreeModel::iterator iter = selection->get_selected() ) {
             treeRecords->erase( iter );
+            set_total_cost( 0 );
         }
     }
 }
