@@ -89,8 +89,7 @@ void TreeViewGoods::on_menu_file_popup_generic()
 bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
 {
     if( ( event->type == GDK_BUTTON_PRESS ) && ( event->button == 1 ) ) {
-        imageAvailable->set( IMG_WAIT_PATH );
-        labelAvailable->set_label( "Проверка наличия..." );
+        set_available_state( IMG_WAIT_PATH, "Проверка наличия..." );
         /* Checking available in separate thread */
         Glib::Thread::create( sigc::mem_fun( *this, &TreeViewGoods::check_available ) );
     }
@@ -107,10 +106,27 @@ bool TreeViewGoods::on_button_press_event( GdkEventButton *event )
  *  %bicycle%                                                                 *
   *****************************************************************************/
 
-void TreeViewGoods::set_available( Gtk::Image *image, Gtk::Label *label )
+void TreeViewGoods::set_available_pointers( Gtk::Image *image, Gtk::Label *label )
 {
     imageAvailable = image;
     labelAvailable = label;
+}
+
+/*****************************************************************************
+ * Setting progress state (image and text in label).                          *
+ ******************************************************************************
+ *  takes: char* - image filename;                                            *
+ *         char* - text for label;                                            *
+  *****************************************************************************/
+
+void TreeViewGoods::set_available_state( const char *image_filename, const char *text )
+{
+    try {
+        labelAvailable->set_text( text );
+        //imageAvailable->set( image_filename );
+    } catch(...) {
+        g_warning( "HUSTON, WE HAVE A PROBLEM!\n" );
+    }
 }
 
 /*****************************************************************************
@@ -132,34 +148,21 @@ void TreeViewGoods::check_available()
 {
     usleep( 500000 ); // just for lulz :D - 0,5s
 
-    char *query = new char[ COMMAND_BUFFER_SIZE ];
+    char query[ COMMAND_BUFFER_SIZE ];
     char *activated_id = get_activated_id();
 
-    sprintf( query, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
+    snprintf( query, COMMAND_BUFFER_SIZE, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
     int available = execute_query_select_available( query );
 
     if( available ) {
         is_available = true;
-
-        try {
-            imageAvailable->set( IMG_LAMP_ON_PATH );
-            labelAvailable->set_label( "Есть в наличии!" );
-        } catch(...) {
-            g_warning( "HUSTON, WE HAVE A PROBLEM!" );
-        }
+        set_available_state( IMG_LAMP_ON_PATH, "Есть в наличии!" );
     } else {
         is_available = false;
-
-        try {
-            imageAvailable->set( IMG_LAMP_OFF_PATH );
-            labelAvailable->set_label( "Нет в наличии!" );
-        } catch(...) {
-            g_warning( "HUSTON, WE HAVE A PROBLEM!" );
-        }
+        set_available_state( IMG_LAMP_OFF_PATH, "Нет в наличии!" );
     }
 
     delete[] activated_id;
-    delete[] query;
 }
 
 /*****************************************************************************

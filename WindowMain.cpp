@@ -41,7 +41,7 @@ WindowMain::WindowMain()
     boxMain.pack_start( scrolledGoods, true, true, WIDGETS_BORDER );
     scrolledGoods.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_AUTOMATIC);
     scrolledGoods.add( treeGoods );
-    treeGoods.set_available( &imageAvailable, &labelAvailable );
+    treeGoods.set_available_pointers( &imageAvailable, &labelAvailable );
 
     /* Buy section */
     boxMain.pack_start( boxBuy, false, false, WIDGETS_BORDER );
@@ -75,6 +75,7 @@ WindowMain::WindowMain()
     boxRegister.set_size_request( 110 );
 
     boxRegister.pack_start( labelTotal, false, false, WIDGETS_BORDER );
+    treePurchases.set_total_cost_pointers( &floatTotal, &labelTotal );
 
     boxRegister.pack_start( buttonRegister, false, false, WIDGETS_BORDER );
     buttonRegister.set_label( "\nОФОРМИТЬ\n" );
@@ -91,7 +92,13 @@ WindowMain::WindowMain()
     show_all_children();
     on_category_choose();
     on_button_cancel_activate();
-    statusbarMain.push( "Готовы к покупкам? :)" );
+    statusbar_push( "Готовы к покупкам? :)" );
+}
+
+void WindowMain::statusbar_push( const char *message )
+{
+    statusbarMain.pop();
+    statusbarMain.push( message );
 }
 
 /*****************************************************************************
@@ -104,10 +111,10 @@ WindowMain::WindowMain()
 void WindowMain::create_category( Gtk::RadioButton &radio, const char *label )
 {
     /* Create a radiobutton and connect signal */
+    radio.set_label( label );
+    radio.set_group( groupCategories );
     boxCategories.pack_start( radio, false, false );
     radio.signal_released().connect( sigc::mem_fun( *this, &WindowMain::on_category_choose ) );
-    radio.set_group( groupCategories );
-    radio.set_label( label );
 }
 
 /*****************************************************************************
@@ -126,10 +133,8 @@ void WindowMain::on_button_buy_activate()
     if( res->size() != 0 ) {
         if( treeGoods.get_is_available() ) {
             Glib::ustring count = entryCount.get_text();
-
             if( is_number( count.c_str() ) ) {
                 float f_cost = strtof( count.c_str(), NULL );
-
                 if( f_cost > 0 ) {
                     f_cost *= strtof( res->at(0).price.c_str(), NULL );
 
@@ -138,22 +143,21 @@ void WindowMain::on_button_buy_activate()
                     Glib::ustring cost( buffer );
 
                     floatTotal += f_cost;
-                    sprintf( buffer, "Итого:  %.2f грн", floatTotal );
-                    labelTotal.set_text( buffer );
+                    treePurchases.set_total_cost( floatTotal );
 
                     treePurchases.append_data( res->at(0).name, count, cost );
-                    statusbarMain.push( "Добавлено в чек." );
+                    statusbar_push( "Добавлено в чек." );
                 } else {
-                    statusbarMain.push( "Невозможно купить 0 штук! *CRAZY*" );
+                    statusbar_push( "Невозможно купить 0 штук!" );
                 }
             } else {
-                statusbarMain.push( "Введите нормальное количество!" );
+                statusbar_push( "Введите нормальное количество!" );
             }
         } else {
-            statusbarMain.push( "Данного товара нет в наличии!" );
+            statusbar_push( "Данного товара нет в наличии!" );
         }
     } else {
-        statusbarMain.push( "Ничего не выбрано!" );
+        statusbar_push( "Ничего не выбрано!" );
     }
 
     entryCount.set_text( "1" );
@@ -168,10 +172,9 @@ void WindowMain::on_button_buy_activate()
 
 void WindowMain::on_button_cancel_activate()
 {
-    floatTotal = 0;
+    statusbar_push( "Отменено..." );
     treePurchases.remove_all_rows();
-    statusbarMain.push( "Отменено..." );
-    labelTotal.set_text( "Итого: 0,00 грн" );
+    treePurchases.set_total_cost( 0 );
 }
 
 /*****************************************************************************
@@ -185,12 +188,14 @@ void WindowMain::on_button_register_activate()
         int response = reg.run();
 
         if( response == 0 ) {
-            /* there may be save data or something else... */
+            /*
+             *  there may be save data or something else...
+             */
             on_button_cancel_activate();
-            statusbarMain.push( "Готово!" );
+            statusbar_push( "Готово!" );
         }
     } else {
-        statusbarMain.push( "Нечего оформлять!" );
+        statusbar_push( "Нечего оформлять!" );
     }
 }
 
@@ -200,12 +205,7 @@ void WindowMain::on_button_register_activate()
 
 void WindowMain::on_category_choose()
 {
-    try {
-        labelAvailable.set_label( "Загрузка..." );
-        imageAvailable.set( IMG_WAIT_PATH );
-    } catch(...) {
-        g_warning( "HUSTON, WE HAVE A PROBLEM!" );
-    }
+    treeGoods.set_available_state( IMG_WAIT_PATH, "Загрузка..." );
     /* Loading will be in a separate thread */
     Glib::Thread::create( sigc::mem_fun( *this, &WindowMain::fill_goodslist ) );
 }
@@ -232,7 +232,7 @@ void WindowMain::fill_goodslist()
         section = "Jujube";
     }
 
-    char *command = new char[ COMMAND_BUFFER_SIZE ];
+    char command[ COMMAND_BUFFER_SIZE ];
     sprintf( command, "SELECT `id`, `name`, `price`, `item` FROM `%s`;", section );
     std::vector<GoodsRecord> *res = execute_query_select_goods( command );
 
@@ -240,16 +240,8 @@ void WindowMain::fill_goodslist()
         treeGoods.append_data( res->at( i ) );
     }
 
-    try {
-        imageAvailable.clear();
-        treeGoods.set_section( section );
-        labelAvailable.set_label( "Загружено!" );
-    } catch(...) {
-        g_warning( "HUSTON, WE HAVE A PROBLEM!" );
-    }
-
+    treeGoods.set_available_state( "gtk-connect", "Загружено!" );
     delete res;
-    delete[] command;
 }
 
 /*****************************************************************************

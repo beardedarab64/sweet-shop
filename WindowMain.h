@@ -9,6 +9,7 @@ class WindowMain: public Gtk::Window
 {
     public:
         WindowMain();
+        void statusbar_push( const char * );
 
     protected:
         void create_category( Gtk::RadioButton &, const char * );

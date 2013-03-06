@@ -13,7 +13,8 @@ class TreeViewGoods: public Gtk::TreeView
         void remove_all_rows();
         void append_data( GoodsRecord & );
         void append_data( Glib::ustring &, Glib::ustring &, Glib::ustring &, Glib::ustring & );
-        void set_available( Gtk::Image *, Gtk::Label * );
+        void set_available_pointers( Gtk::Image *, Gtk::Label * );
+        void set_available_state( const char *, const char * );
         void set_section( const char * );
         void check_available();
         char *get_section();

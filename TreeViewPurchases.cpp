@@ -1,4 +1,5 @@
 #include "TreeViewPurchases.h"
+#include <cstdio>
 
 /*****************************************************************************
  * Creating columns for purchases description.                                *
@@ -66,6 +67,33 @@ void TreeViewPurchases::append_data( Glib::ustring &name,
     row[ treeColumns.count ] = count;
     row[ treeColumns.cost ] = cost;
     countOfProducts++;
+}
+
+/*****************************************************************************
+ * Set some variables.                                                        *
+ ******************************************************************************
+ *  %one more bicycle%                                                        *
+  *****************************************************************************/
+
+void TreeViewPurchases::set_total_cost_pointers( float *total, Gtk::Label *label )
+{
+    floatTotal = total;
+    labelTotal = label;
+}
+
+/*****************************************************************************
+ * Set total cost value (in label).                                           *
+ ******************************************************************************
+ *  takes: float - cost;                                                      *
+  *****************************************************************************/
+
+void TreeViewPurchases::set_total_cost( float cost )
+{
+    *floatTotal = cost;
+
+    char buffer[ COMMAND_BUFFER_SIZE ];
+    sprintf( buffer, "Итого:  %.2f грн", cost );
+    labelTotal->set_text( buffer );
 }
 
 /*****************************************************************************
