@@ -240,7 +240,8 @@ void WindowMain::fill_goodslist()
         treeGoods.append_data( res->at( i ) );
     }
 
-    treeGoods.set_available_state( "gtk-connect", "Загружено!" );
+    treeGoods.set_available_state( "", "Загружено!" );
+    treeGoods.set_section( section );
     delete res;
 }
 
