@@ -12,9 +12,7 @@
 #define WINDOW_REGISTER_TITLE           "Подтвержение покупки"
 
 /* Global numeric constants */
-#define ERROR_BUFFER_SIZE               256
-#define COMMAND_BUFFER_SIZE             256
-
+#define BUFFER_SIZE                     128
 #define WIDGETS_BORDER                  5
 
 /* Filenames */

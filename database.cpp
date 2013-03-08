@@ -32,7 +32,8 @@ sqlite3 *open_database( const char *filename )
 
 void close_database( sqlite3 *database )
 {
-    sqlite3_exec( database,"COMMIT TRANSACTION RESTOREPOINT;", NULL, NULL, NULL );
+    const char query[] = "COMMIT TRANSACTION RESTOREPOINT;";
+    sqlite3_exec( database, query, NULL, NULL, NULL );
     sqlite3_close( database );
 }
 
@@ -68,8 +69,8 @@ int select_goods_callback( void *result, int argc, char **argv, char **col )
 std::vector<GoodsRecord> *execute_query_select_goods( const char *query )
 {
     std::vector<GoodsRecord> *result = new std::vector<GoodsRecord>;
-    char *errmsg;
     sqlite3 *database = open_database( DATABASE_PATH );
+    char *errmsg;
 
     if( database != NULL ) {
         sqlite3_exec( database, query, select_goods_callback, result, &errmsg );

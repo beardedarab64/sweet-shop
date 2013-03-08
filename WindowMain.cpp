@@ -95,6 +95,12 @@ WindowMain::WindowMain()
     statusbar_push( "Готовы к покупкам? :)" );
 }
 
+/*****************************************************************************
+ * Set data to the statusbar.                                                 *
+ ******************************************************************************
+ *  takes: char* - message;                                                   *
+  *****************************************************************************/
+
 void WindowMain::statusbar_push( const char *message )
 {
     statusbarMain.pop();
@@ -126,8 +132,9 @@ void WindowMain::on_button_buy_activate()
     char *section = treeGoods.get_section();
     char *id = treeGoods.get_activated_id();
 
-    char query[ COMMAND_BUFFER_SIZE ];
-    sprintf( query, "SELECT `id`, `name`, `price`, `item` FROM `%s` WHERE `id` LIKE '%s';", section, id );
+    char query[ BUFFER_SIZE ];
+    const char format[] = "SELECT `id`, `name`, `price`, `item` FROM `%s` WHERE `id` LIKE '%s';";
+    snprintf( query, BUFFER_SIZE, format, section, id );
     std::vector<GoodsRecord> *res = execute_query_select_goods( query );
 
     if( res->size() != 0 ) {
@@ -138,8 +145,9 @@ void WindowMain::on_button_buy_activate()
                 if( f_cost > 0 ) {
                     f_cost *= strtof( res->at(0).price.c_str(), NULL );
 
-                    char buffer[48];
-                    sprintf( buffer, "%.2f грн", f_cost );
+                    char buffer[ BUFFER_SIZE ];
+                    const char format[] = "%.2f грн";
+                    snprintf( buffer, BUFFER_SIZE, format, f_cost );
                     Glib::ustring cost( buffer );
 
                     floatTotal += f_cost;
@@ -185,7 +193,7 @@ void WindowMain::on_button_register_activate()
 {
     if( treePurchases.get_count() != 0 ) {
         WindowRegister reg;
-        int response = reg.run();
+        int response = reg.run( floatTotal );
 
         if( response == 0 ) {
             /*
@@ -232,17 +240,18 @@ void WindowMain::fill_goodslist()
         section = "Jujube";
     }
 
-    char command[ COMMAND_BUFFER_SIZE ];
-    sprintf( command, "SELECT `id`, `name`, `price`, `item` FROM `%s`;", section );
+    char command[ BUFFER_SIZE ];
+    const char format[] = "SELECT `id`, `name`, `price`, `item` FROM `%s`;";
+    snprintf( command, BUFFER_SIZE, format, section );
     std::vector<GoodsRecord> *res = execute_query_select_goods( command );
 
     for( unsigned int i = 0; i < res->size(); i++ ) {
-        treeGoods.append_data( res->at( i ) );
+        treeGoods.append_data( res->at(i) );
     }
 
-    usleep( 500000 ); // just for lulz :D - 0,5s
+    sleep( 1 ); // just for lulz :D
 
-    treeGoods.set_available_state( "", "Загружено!" );
+    treeGoods.set_available_state( IMG_LAMP_ON_PATH, "Загружено!" );
     treeGoods.set_section( section );
     delete res;
 }

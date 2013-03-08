@@ -125,7 +125,7 @@ void TreeViewGoods::set_available_state( const char *image_filename, const char 
         labelAvailable->set_text( text );
         imageAvailable->set( image_filename );
     } catch(...) {
-        g_warning( "HUSTON, WE HAVE A PROBLEM!\n" );
+        g_warning( "HUSTON, WE HAVE A PROBLEM! (Something with image loading)\n" );
     }
 }
 
@@ -146,24 +146,22 @@ void TreeViewGoods::set_section( const char *name )
 
 void TreeViewGoods::check_available()
 {
-    char *query = new char[ COMMAND_BUFFER_SIZE ];
+    sleep( 1 ); // just for lulz :D
+
     char *activated_id = get_activated_id();
+    char query[ BUFFER_SIZE ];
 
-    sprintf( query, "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';", goodsSection, activated_id );
-    int available = execute_query_select_available( query );
+    const char format[] = "SELECT `available` FROM `%s` WHERE `id` LIKE '%s';";
+    snprintf( query, BUFFER_SIZE, format, goodsSection, activated_id );
+    is_available = execute_query_select_available( query );
 
-    usleep( 500000 ); // just for lulz :D - 0,5s
-
-    if( available ) {
-        is_available = true;
+    if( is_available ) {
         set_available_state( IMG_LAMP_ON_PATH, "Есть в наличии!" );
     } else {
-        is_available = false;
         set_available_state( IMG_LAMP_OFF_PATH, "Нет в наличии!" );
     }
 
     delete[] activated_id;
-    delete[] query;
 }
 
 /*****************************************************************************
@@ -200,3 +198,4 @@ bool TreeViewGoods::get_is_available()
 {
     return is_available;
 }
+

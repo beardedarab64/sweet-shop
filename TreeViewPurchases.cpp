@@ -91,8 +91,9 @@ void TreeViewPurchases::set_total_cost( float cost )
 {
     *floatTotal = cost;
 
-    char buffer[ COMMAND_BUFFER_SIZE ];
-    sprintf( buffer, "Итого:  %.2f грн", cost );
+    char buffer[ BUFFER_SIZE ];
+    const char format[] = "Итого:  %.2f грн";
+    snprintf( buffer, BUFFER_SIZE, format, cost );
     labelTotal->set_text( buffer );
 }
 
